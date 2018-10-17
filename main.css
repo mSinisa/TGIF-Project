@@ -14,7 +14,10 @@ color: black;
 
 .navBar{
 background-color: gray;
+}
 
+nav a{
+color: white;
 }
 
 .textArea{
