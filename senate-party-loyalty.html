@@ -1,16 +1,13 @@
 <!DOCTYPE HTML>
-<html lang="">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
-  <title>House Attendance</title>
+  <title>Senate</title>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="fcss.css">
-
-
 </head>
-
 <body>
   <div class="container">
 
@@ -61,13 +58,12 @@
     <div class="bodyArea">
     <div class="row">
     <div class="col-6">
-     <h2>Attendance</h2>
-            <p>The Constitution specifies that a majority of members constitutes a quorum to do business in each house. Representatives and senators rarely force the presence of a quorum by demanding quorum calls; thus, in most cases, debates continue even if a majority is not present.</p>
-
-            <p>The Senate uses roll-call votes; a clerk calls out the names of all the senators, each senator stating "aye" or "no" when his or her name is announced. The House reserves roll-call votes for the most formal matters, as a roll-call of all 435 representatives takes quite some time; normally, members vote by electronic device. In the case of a tie, the motion in question fails. In the Senate, the Vice President may (if present) cast the tiebreaking vote.</p>
+     <h2>Party Loyalty</h2>
+            <p>Those who consider themselves to be strong partisans, strong Democrats and strong Republicans respectively, tend to be the most faithful in voting for their party's nominee for office and legislation that backs their party's agenda. </p>
+    	    
     	</div>  
            <div class="col-6">  
-            <h2>House at a glance</h2>
+            <h2>Senate at a glance</h2>
             <table>
                 <thead>
                     <tr>
@@ -76,7 +72,7 @@
                         <th>% Voted with Party</th>
                     </tr>
                 </thead>
-                <tbody id="topTableBodyHouse">
+                <tbody id="senateLoyaltyTable">
                    
                 </tbody>
             </table>
@@ -85,32 +81,33 @@
             
     <div class="row">
     <div class="col-6">
-            <h2>Least Engaged (Bottom 10% Attendance)</h2>
+            <h2>Least Loyal (Bottom 10% of Party)</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Number of Missed Votes</th>
-                        <th>% Missed</th>
+                        <th>Number Party Votes</th>
+                        <th>% Party Votes</th>
                     </tr>
                 </thead>
-                <tbody id="leastEngagedHouse">
+                <tbody id="senateLeastLoyalTable">
                     
                 </tbody>
             </table>
+
         </div>
            
     <div class="col-6">
-            <h2>Most Engaged (Top 10% Attendance)</h2>
+            <h2>Most Loyal (Top 10% of Party)</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Number of Missed Votes</th>
-                        <th>% Missed</th>
+                        <th>Number Party Votes</th>
+                        <th>% Party Votes</th>
                     </tr>
                 </thead>
-                <tbody id="mostEngagedHouse">
+                <tbody id="senateMostLoyalTable">
                     
                 </tbody>
             </table>
@@ -126,8 +123,8 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  <script src="pro-congress-113-house.js"></script>
-  <script src="house-attendance.js"></script>
+  <script src="pro-congress-113-senate.js"></script>
+  <script src="senate-party-loyalty.js"></script>
   
 </body>
 </html>
