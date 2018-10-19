@@ -81,21 +81,21 @@ function getBottomAndTop10PctAttendanceHouse(sortMembersByMissedVotesHouse, acc)
     //calculate 10percent of members and round the number to have a cut off point
     var num = Math.round(sortMembersByMissedVotesHouse.length * 0.1);
     if (acc) {
-        for (var i = 0; i <= num; i++) {
+        for (var i = 0; i <num; i++) {
             bottom10PctMembersByMissedVotesHouse.push(sortMembersByMissedVotesHouse[i]);
         }
 
-        for (var j = num + 1; j < sortMembersByMissedVotesHouse.length; j++) {
-            if (sortMembersByMissedVotesHouse[j].missed_votes_pct === sortMembersByMissedVotesHouse[num].missed_votes_pct) {
+        for (var j = num; j < sortMembersByMissedVotesHouse.length; j++) {
+            if (sortMembersByMissedVotesHouse[j].missed_votes_pct === sortMembersByMissedVotesHouse[num-1].missed_votes_pct) {
                 bottom10PctMembersByMissedVotesHouse.push(sortMembersByMissedVotesHouse[j]);
             }
         }
     } else {
 
-        for (var k = sortMembersByMissedVotesHouse.length - 1; k >= sortMembersByMissedVotesHouse.length - num; k--) {
+        for (var k = sortMembersByMissedVotesHouse.length - 1; k > sortMembersByMissedVotesHouse.length - num - 1; k--) {
             top10PctMembersByMissedVotesHouse.push(sortMembersByMissedVotesHouse[k]);
         }
-        for (var l = sortMembersByMissedVotesHouse.length - 1; l < sortMembersByMissedVotesHouse.length - num; l--) {
+        for (var l = sortMembersByMissedVotesHouse.length -num - 1; l > 0; l--) {
             if (sortMembersByMissedVotesHouse[l].missed_votes_pct === sortMembersByMissedVotesHouse[sortMembersByMissedVotesHouse.length - num].missed_votes_pct) {
                 top10PctMembersByMissedVotesHouse.push(sortMembersByMissedVotesHouse[l]);
             }

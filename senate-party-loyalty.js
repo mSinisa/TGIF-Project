@@ -78,21 +78,21 @@ function getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct, acc) {
     //calculate 10percent of members and round the number to have a cut off point
     var num = Math.round(sortMembersByVotesWithPartyPct.length * 0.1);
     if (acc) {
-        for (var i = 0; i <= num; i++) {
+        for (var i = 0; i < num; i++) {
             bottom10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[i]);
         }
 
-        for (var j = num + 1; j < sortMembersByVotesWithPartyPct.length; j++) {
-            if (sortMembersByVotesWithPartyPct[j].votes_with_party_pct === sortMembersByVotesWithPartyPct[num].missed_votes_pct) {
+        for (var j = num; j < sortMembersByVotesWithPartyPct.length; j++) {
+            if (sortMembersByVotesWithPartyPct[j].votes_with_party_pct === sortMembersByVotesWithPartyPct[num - 1].missed_votes_pct) {
                 bottom10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[j]);
             }
         }
     } else {
 
-        for (var k = sortMembersByVotesWithPartyPct.length - 1; k >= sortMembersByVotesWithPartyPct.length - num; k--) {
+        for (var k = sortMembersByVotesWithPartyPct.length - 1; k > sortMembersByVotesWithPartyPct.length - num - 1; k--) {
             top10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[k]);
         }
-        for (var l = sortMembersByVotesWithPartyPct.length - 1; l < sortMembersByVotesWithPartyPct.length - num; l--) {
+        for (var l = sortMembersByVotesWithPartyPct.length - num - 1; l > 0 ; l--) {
             if (sortMembersByVotesWithPartyPct[l].votes_with_party_pct === sortMembersByVotesWithPartyPct[sortMembersByVotesWithPartyPct.length - num].votes_with_party_pct) {
                 top10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[l]);
             }

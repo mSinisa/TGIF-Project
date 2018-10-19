@@ -3,12 +3,12 @@
     text-align: center;
 }
 
-.marginBottom20{
-margin-bottom: 20px;
+.marginBottom20 {
+    margin-bottom: 20px;
 }
 
-.marginBottom40{
-margin-bottom: 40px;
+.marginBottom40 {
+    margin-bottom: 40px;
 }
 
 .header {
@@ -16,7 +16,7 @@ margin-bottom: 40px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding:5px 0;
+    padding: 5px 0;
 }
 
 .emailLink {
@@ -36,29 +36,29 @@ nav a {
 }
 
 /**** INDEX PAGE *****/
-.card-header:first-child{
+.card-header:first-child {
     height: 60px;
     background: white;
     display: flex;
     align-items: center;
-    
+
 }
 
-.card{
-border: none;
+.card {
+    border: none;
 }
 
-.accordion .card:not(:first-of-type) .card-header:first-child{
-height: 60px;
+.accordion .card:not(:first-of-type) .card-header:first-child {
+    height: 60px;
     background: white;
     display: flex;
     align-items: center;
-   
-} 
+
+}
 
 /****** HOUSE AND SENATE TABLE FILTER PAGES******/
-.textArea{
-padding-left: 0;
+.textArea {
+    padding-left: 0;
 }
 
 .houseImg {
@@ -67,10 +67,10 @@ padding-left: 0;
     background-position: right;
     background-size: contain;
     height: 250px;
-    
+
 }
 
-.senateImg{
+.senateImg {
     background-image: url(images/senate_seal.png);
     background-repeat: no-repeat;
     background-position: right;
@@ -78,8 +78,8 @@ padding-left: 0;
     height: 250px;
 }
 
-.filterAreaContainer{
-margin-top: 30px;
+.filterAreaContainer {
+    margin-top: 30px;
 }
 
 .filterCheckboxes label {
@@ -102,13 +102,35 @@ table.tableDisplay {
     line-height: 10px;
 }
 
-table.tableDisplay td,
-th {
+table.tableDisplay td {
     text-align: center;
+    vertical-align: middle;
+}
+
+table.tableDisplay th {
+    text-align: center;
+    vertical-align: middle;
 }
 
 table.tableDisplay thead {
     background-color: gray;
+}
+
+.heightThead {
+    height: 50px;
+}
+
+.widthSmall{
+width:20%;
+}
+.widthMedium{
+width:40%;
+}
+.widthTH{
+width:33%;
+}
+.widthTHsmall{
+width:25%;
 }
 
 /***** FOOTER *******/

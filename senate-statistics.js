@@ -1,10 +1,8 @@
 var members = data.results[0].members;
-
 //TOTAL NUMBER OF MEMBERS
 var democrats = [];
 var republicans = [];
 var independents = [];
-
 //VOTED WITH PARTY ALL PERCENTAGES
 var allDemocratsVotedPercantages = [];
 var allRepublicansVotedPercantages = [];
@@ -51,6 +49,17 @@ var statistics = {
 }
 
 ////FUNCTIONS
+//function partyPctVoted(arr) {
+//    var sum = 0;
+//    for (var i = 0; i < arr.length; i++) {
+//        sum = sum + arr[i];
+//    }
+//    var average = "% " + Math.round(sum / arr.length);
+//    return average;
+//}
+//partyPctVoted(allDemocratsVotedPercantages);
+//partyPctVoted(allRepublicansVotedPercantages);
+//partyPctVoted(allIndependentsVotedPercantages);
 //DEMOCRATS VOTED WITH PARTY
 function democratsPctVoted() {
     var sum = 0;
@@ -101,21 +110,21 @@ function getBottomAndTop10PctAttendance(sortMembersByMissedVotes, acc) {
     //calculate 10percent of members and round the number to have a cut off point
     var num = Math.round(sortMembersByMissedVotes.length * 0.1);
     if (acc) {
-        for (var i = 0; i <= num; i++) {
+        for (var i = 0; i < num; i++) {
             bottom10PctMembersByMissedVotes.push(sortMembersByMissedVotes[i]);
         }
 
-        for (var j = num + 1; j < sortMembersByMissedVotes.length; j++) {
-            if (sortMembersByMissedVotes[j].missed_votes_pct === sortMembersByMissedVotes[num].missed_votes_pct) {
+        for (var j = num; j < sortMembersByMissedVotes.length; j++) {
+            if (sortMembersByMissedVotes[j].missed_votes_pct === sortMembersByMissedVotes[num-1].missed_votes_pct) {
                 bottom10PctMembersByMissedVotes.push(sortMembersByMissedVotes[j]);
             }
         }
     } else {
 
-        for (var k = sortMembersByMissedVotes.length - 1; k >= sortMembersByMissedVotes.length - num; k--) {
+        for (var k = sortMembersByMissedVotes.length - 1; k > sortMembersByMissedVotes.length - num -1; k--) {
             top10PctMembersByMissedVotes.push(sortMembersByMissedVotes[k]);
         }
-        for (var l = sortMembersByMissedVotes.length - 1; l < sortMembersByMissedVotes.length - num; l--) {
+        for (var l = sortMembersByMissedVotes.length - num -1; l > 0 ; l--) {
             if (sortMembersByMissedVotes[l].missed_votes_pct === sortMembersByMissedVotes[sortMembersByMissedVotes.length - num].missed_votes_pct) {
                 top10PctMembersByMissedVotes.push(sortMembersByMissedVotes[l]);
             }

@@ -81,21 +81,21 @@ function getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse, a
     //calculate 10percent of members and round the number to have a cut off point
     var num = Math.round(sortMembersByVotesWithPartyPctHouse.length * 0.1);
     if (acc) {
-        for (var i = 0; i <= num; i++) {
+        for (var i = 0; i < num; i++) {
             bottom10PctMembersByVotesWithPartyHouse.push(sortMembersByVotesWithPartyPctHouse[i]);
         }
 
-        for (var j = num + 1; j < sortMembersByVotesWithPartyPctHouse.length; j++) {
-            if (sortMembersByVotesWithPartyPctHouse[j].votes_with_party_pct === sortMembersByVotesWithPartyPctHouse[num].missed_votes_pct) {
+        for (var j = num; j < sortMembersByVotesWithPartyPctHouse.length; j++) {
+            if (sortMembersByVotesWithPartyPctHouse[j].votes_with_party_pct === sortMembersByVotesWithPartyPctHouse[num-1].missed_votes_pct) {
                 bottom10PctMembersByVotesWithPartyHouse.push(sortMembersByVotesWithPartyPctHouse[j]);
             }
         }
     } else {
 
-        for (var k = sortMembersByVotesWithPartyPctHouse.length - 1; k >= sortMembersByVotesWithPartyPctHouse.length - num; k--) {
+        for (var k = sortMembersByVotesWithPartyPctHouse.length - 1; k > sortMembersByVotesWithPartyPctHouse.length - num-1; k--) {
             top10PctMembersByVotesWithPartyHouse.push(sortMembersByVotesWithPartyPctHouse[k]);
         }
-        for (var l = sortMembersByVotesWithPartyPctHouse.length - 1; l < sortMembersByVotesWithPartyPctHouse.length - num; l--) {
+        for (var l = sortMembersByVotesWithPartyPctHouse.length - num - 1; l > 0; l--) {
             if (sortMembersByVotesWithPartyPctHouse[l].votes_with_party_pct === sortMembersByVotesWithPartyPctHouse[sortMembersByVotesWithPartyPctHouse.length - num].votes_with_party_pct) {
                 top10PctMembersByVotesWithPartyHouse.push(sortMembersByVotesWithPartyPctHouse[l]);
             }
