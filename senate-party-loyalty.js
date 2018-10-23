@@ -1,5 +1,5 @@
-var members = data.results[0].members;
-
+var members;
+var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
 //TOTAL NUMBER OF MEMBERS
 var democrats = [];
 var republicans = [];
@@ -8,8 +8,36 @@ var independents = [];
 var allDemocratsVotedPercantages = [];
 var allRepublicansVotedPercantages = [];
 var allIndependentsVotedPercantages = [];
+//PARTY ENGAGEDMENT 10% ATTENDANCE
+var statistics;
+var bottom10PctMembersByVotesWithParty = [];
+var top10PctMembersByVotesWithParty = [];
 
-function getMembersFromParties() {
+fetch(url, {
+        headers: {
+            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+        }
+    })
+    .then(function (data) {
+        return data.json();
+    })
+    .then(function (myData) {
+        var members = myData.results[0].members;
+
+        getMembersFromParties(members);
+        fillTheObject();
+        partyPctVoted(allDemocratsVotedPercantages);
+        partyPctVoted(allRepublicansVotedPercantages);
+        partyPctVoted(allIndependentsVotedPercantages);
+        getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct(members), true);
+        getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct(members), false);
+        createLeastAndMostLoyalTables("senateLeastLoyalTable", bottom10PctMembersByVotesWithParty);
+        createLeastAndMostLoyalTables("senateMostLoyalTable", top10PctMembersByVotesWithParty);
+        createTopTable(statistics, "senateLoyaltyTable");
+    })
+
+
+function getMembersFromParties(members) {
     //loop through all members 
     for (var i = 0; i < members.length; i++) {
         //if they are democrats
@@ -27,26 +55,27 @@ function getMembersFromParties() {
         }
     }
 }
-getMembersFromParties();
 
-var statistics = {
-    "parties": [
-        {
-            "party": "Democrats",
-            "number_of_members": democrats.length,
-            "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
+function fillTheObject() {
+    statistics = {
+        "parties": [
+            {
+                "party": "Democrats",
+                "number_of_members": democrats.length,
+                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
         },
-        {
-            "party": "Republicans",
-            "number_of_members": republicans.length,
-            "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
+            {
+                "party": "Republicans",
+                "number_of_members": republicans.length,
+                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
         },
-        {
-            "party": "Independents",
-            "number_of_members": independents.length,
-            "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
+            {
+                "party": "Independents",
+                "number_of_members": independents.length,
+                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
         }
         ]
+    }
 }
 
 function partyPctVoted(arr) {
@@ -57,12 +86,10 @@ function partyPctVoted(arr) {
     var average = "% " + Math.round(sum / arr.length);
     return average;
 }
-partyPctVoted(allDemocratsVotedPercantages);
-partyPctVoted(allRepublicansVotedPercantages);
-partyPctVoted(allIndependentsVotedPercantages);
+
 
 //sort array of members by votes with party pct
-function sortMembersByVotesWithPartyPct() {
+function sortMembersByVotesWithPartyPct(members) {
     var allMembers = Array.from(members);
     allMembers.sort(function (a, b) {
         return (a.votes_with_party_pct > b.votes_with_party_pct) ? 1 : ((b.votes_with_party_pct > a.votes_with_party_pct) ? -1 : 0);
@@ -71,8 +98,7 @@ function sortMembersByVotesWithPartyPct() {
 }
 
 //PARTY LOYALTY 10%  
-var bottom10PctMembersByVotesWithParty = [];
-var top10PctMembersByVotesWithParty = [];
+
 
 function getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct, acc) {
     //calculate 10percent of members and round the number to have a cut off point
@@ -92,17 +118,16 @@ function getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct, acc) {
         for (var k = sortMembersByVotesWithPartyPct.length - 1; k > sortMembersByVotesWithPartyPct.length - num - 1; k--) {
             top10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[k]);
         }
-        for (var l = sortMembersByVotesWithPartyPct.length - num - 1; l > 0 ; l--) {
+        for (var l = sortMembersByVotesWithPartyPct.length - num - 1; l > 0; l--) {
             if (sortMembersByVotesWithPartyPct[l].votes_with_party_pct === sortMembersByVotesWithPartyPct[sortMembersByVotesWithPartyPct.length - num].votes_with_party_pct) {
                 top10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[l]);
             }
         }
     }
 }
-getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct(), true);
-getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct(), false);
+
 //TABLES
-function createTopTable(idname) {
+function createTopTable(statistics, idname) {
     var parties = statistics.parties
     for (var i = 0; i < parties.length; i++) {
         var tableRow = document.createElement("tr");
@@ -118,7 +143,7 @@ function createTopTable(idname) {
         document.getElementById(idname).append(tableRow);
     }
 }
-createTopTable("senateLoyaltyTable");
+
 
 function createLeastAndMostLoyalTables(idname, arr) {
     for (var i = 0; i < arr.length; i++) {
@@ -142,5 +167,3 @@ function createLeastAndMostLoyalTables(idname, arr) {
         document.getElementById(idname).append(tableRow);
     }
 }
-createLeastAndMostLoyalTables("senateLeastLoyalTable",bottom10PctMembersByVotesWithParty);
-createLeastAndMostLoyalTables("senateMostLoyalTable",top10PctMembersByVotesWithParty);

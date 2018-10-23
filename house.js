@@ -1,4 +1,23 @@
-var membersHouse = dataHouse.results[0].members;
+//var membersHouse = dataHouse.results[0].members;
+
+var membersHouse;
+var url = "https://api.propublica.org/congress/v1/113/house/members.json";
+//AJAX - Asincrone, this code needs some time to execute.  
+fetch(url, {
+       headers: {
+           "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+       }
+   })
+   .then(function (data) {
+       return data.json();
+   })
+   .then(function (myData) {
+       console.log(myData);
+       membersHouse = myData.results[0].members;
+    createTableHouse();
+    showMemberDropDown(membersHouse);
+    createStates();
+})
 
 function createTableHouse() {
     var tableBodyHouse = document.getElementById("tableBodyHouse");
@@ -37,7 +56,7 @@ function createTableHouse() {
     }
 }
 
-createTableHouse();
+
 
 
 document.querySelectorAll("input[name=Party]")[0].addEventListener("click", createTableHouse);
@@ -70,7 +89,7 @@ function showMemberDropDown(member) {
         return true;
     }
 }
-showMemberDropDown(membersHouse);
+
 
 document.getElementById("dropDownBody").addEventListener("change", createTableHouse);
 
@@ -92,4 +111,4 @@ function createStates() {
     }
 }
 
-createStates();
+

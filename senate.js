@@ -1,6 +1,26 @@
-var members = data.results[0].members;
+//var members = data.results[0].members;
+//API key-B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O
+var members;
+var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+//AJAX - Asincrone, this code needs some time to execute.  
+fetch(url, {
+       headers: {
+           "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+       }
+   })
+   .then(function (data) {
+       return data.json();
+   })
+   .then(function (myData) {
+       console.log(myData);
+       members = myData.results[0].members; 
+createTable();
+showMemberDropDown(members);
+createStates();
+})
 
 //SENATE TABLE
+
 
 function createTable() {
     var tableBody = document.getElementById("tableBody");
@@ -39,7 +59,7 @@ function createTable() {
     }
 }
 
-createTable();
+
 
 //SENATE CHECKBOXES
 
@@ -71,7 +91,7 @@ function showMemberDropDown(member) {
         return true;
     }
 }
-showMemberDropDown(members);
+
 
 document.getElementById("dropDownBody").addEventListener("change", createTable);
 
@@ -93,4 +113,3 @@ function createStates() {
     }
 }
 
-createStates();

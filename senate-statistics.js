@@ -1,104 +1,95 @@
-var members = data.results[0].members;
+var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+//AJAX - Asincrone, this code needs some time to execute. 
 //TOTAL NUMBER OF MEMBERS
 var democrats = [];
 var republicans = [];
 var independents = [];
 //VOTED WITH PARTY ALL PERCENTAGES
+var statistics;
 var allDemocratsVotedPercantages = [];
 var allRepublicansVotedPercantages = [];
 var allIndependentsVotedPercantages = [];
-
-function getMembersFromParties() {
-    //loop through all members 
-    for (var i = 0; i < members.length; i++) {
-        //if they are democrats
-        if (members[i].party === "D") {
-            //make an array of democrats
-            democrats.push(members[i]);
-            //make an array or percentage votes for democrats
-            allDemocratsVotedPercantages.push(members[i].votes_with_party_pct);
-        } else if (members[i].party === "R") {
-            republicans.push(members[i]);
-            allRepublicansVotedPercantages.push(members[i].votes_with_party_pct);
-        } else {
-            independents.push(members[i]);
-            allIndependentsVotedPercantages.push(members[i].votes_with_party_pct);
-        }
-    }
-}
-getMembersFromParties();
-
-var statistics = {
-    "parties": [
-        {
-            "party": "Democrats",
-            "number_of_members": democrats.length,
-            "votes_with_party_pct": democratsPctVoted()
-        },
-        {
-            "party": "Republicans",
-            "number_of_members": republicans.length,
-            "votes_with_party_pct": republicansPctVoted()
-        },
-        {
-            "party": "Independents",
-            "number_of_members": independents.length,
-            "votes_with_party_pct": independentsPctVoted()
-        }
-        ]
-}
-
-////FUNCTIONS
-//function partyPctVoted(arr) {
-//    var sum = 0;
-//    for (var i = 0; i < arr.length; i++) {
-//        sum = sum + arr[i];
-//    }
-//    var average = "% " + Math.round(sum / arr.length);
-//    return average;
-//}
-//partyPctVoted(allDemocratsVotedPercantages);
-//partyPctVoted(allRepublicansVotedPercantages);
-//partyPctVoted(allIndependentsVotedPercantages);
-//DEMOCRATS VOTED WITH PARTY
-function democratsPctVoted() {
-    var sum = 0;
-    for (var i = 0; i < allDemocratsVotedPercantages.length; i++) {
-        sum = sum + allDemocratsVotedPercantages[i];
-    }
-    var average = "% " + Math.round(sum / allDemocratsVotedPercantages.length);
-    return average;
-}
-democratsPctVoted();
-
-//REPUBLICANS VOTED WITH PARTY
-function republicansPctVoted() {
-    var sum = 0;
-    for (var i = 0; i < allRepublicansVotedPercantages.length; i++) {
-        sum = sum + allRepublicansVotedPercantages[i];
-    }
-    var average = "% " + Math.round(sum / allRepublicansVotedPercantages.length);
-    return average;
-}
-republicansPctVoted();
-
-//INDEPENDENTS VOTED WITH PARTY
-function independentsPctVoted() {
-    var sum = 0;
-    for (var i = 0; i < allIndependentsVotedPercantages.length; i++) {
-        sum = sum + allIndependentsVotedPercantages[i];
-    }
-    var average = "% " + Math.round(sum / allIndependentsVotedPercantages.length);
-    return average;
-}
-independentsPctVoted();
-
 //PARTY ENGAGEDMENT 10% ATTENDANCE 
 var bottom10PctMembersByMissedVotes = [];
 var top10PctMembersByMissedVotes = [];
 
+fetch(url, {
+        headers: {
+            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+        }
+    })
+    .then(function (data) {
+        return data.json();
+    })
+    .then(function (myData) {
+        var members = myData.results[0].members;
+
+        getMembersFromParties(members);
+        fillTheObject();
+        getBottomAndTop10PctAttendance(sortMembersByMissedVotes(members), true);
+        getBottomAndTop10PctAttendance(sortMembersByMissedVotes(members), false);
+        createLeastAndMostEngagedTable("leastEngagedtbody", bottom10PctMembersByMissedVotes);
+        createLeastAndMostEngagedTable("mostEngagedBody", top10PctMembersByMissedVotes);
+        createTopTable(statistics, "topTableBody");
+    })
+
+
+
+
+
+function getMembersFromParties(obj) {
+    //loop through all members 
+    for (var i = 0; i < obj.length; i++) {
+        //if they are democrats
+        if (obj[i].party === "D") {
+            //make an array of democrats
+            democrats.push(obj[i]);
+            //make an array or percentage votes for democrats
+            allDemocratsVotedPercantages.push(obj[i].votes_with_party_pct);
+        } else if (obj[i].party === "R") {
+            republicans.push(obj[i]);
+            allRepublicansVotedPercantages.push(obj[i].votes_with_party_pct);
+        } else {
+            independents.push(obj[i]);
+            allIndependentsVotedPercantages.push(obj[i].votes_with_party_pct);
+        }
+    }
+}
+
+function fillTheObject() {
+     statistics = {
+        "parties": [
+            {
+                "party": "Democrats",
+                "number_of_members": democrats.length,
+                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
+        },
+            {
+                "party": "Republicans",
+                "number_of_members": republicans.length,
+                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
+        },
+            {
+                "party": "Independents",
+                "number_of_members": independents.length,
+                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
+        }
+        ]
+    }
+}
+
+////FUNCTIONS
+function partyPctVoted(arr) {
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+        sum = sum + arr[i];
+    }
+    var average = "% " + Math.round(sum / arr.length);
+    return average;
+}
+
 //sort array of members by missed votes pct
-function sortMembersByMissedVotes() {
+function sortMembersByMissedVotes(members) {
     var allMembers = Array.from(members);
     allMembers.sort(function (a, b) {
         return (a.missed_votes_pct > b.missed_votes_pct) ? 1 : ((b.missed_votes_pct > a.missed_votes_pct) ? -1 : 0);
@@ -111,32 +102,28 @@ function getBottomAndTop10PctAttendance(sortMembersByMissedVotes, acc) {
     var num = Math.round(sortMembersByMissedVotes.length * 0.1);
     if (acc) {
         for (var i = 0; i < num; i++) {
-            bottom10PctMembersByMissedVotes.push(sortMembersByMissedVotes[i]);
+            top10PctMembersByMissedVotes.push(sortMembersByMissedVotes[i]);
         }
 
         for (var j = num; j < sortMembersByMissedVotes.length; j++) {
-            if (sortMembersByMissedVotes[j].missed_votes_pct === sortMembersByMissedVotes[num-1].missed_votes_pct) {
-                bottom10PctMembersByMissedVotes.push(sortMembersByMissedVotes[j]);
+            if (sortMembersByMissedVotes[j].missed_votes_pct === sortMembersByMissedVotes[num - 1].missed_votes_pct) {
+                top10PctMembersByMissedVotes.push(sortMembersByMissedVotes[j]);
             }
         }
     } else {
 
-        for (var k = sortMembersByMissedVotes.length - 1; k > sortMembersByMissedVotes.length - num -1; k--) {
-            top10PctMembersByMissedVotes.push(sortMembersByMissedVotes[k]);
+        for (var k = sortMembersByMissedVotes.length - 1; k > sortMembersByMissedVotes.length - num - 1; k--) {
+            bottom10PctMembersByMissedVotes.push(sortMembersByMissedVotes[k]);
         }
-        for (var l = sortMembersByMissedVotes.length - num -1; l > 0 ; l--) {
+        for (var l = sortMembersByMissedVotes.length - num - 1; l > 0; l--) {
             if (sortMembersByMissedVotes[l].missed_votes_pct === sortMembersByMissedVotes[sortMembersByMissedVotes.length - num].missed_votes_pct) {
-                top10PctMembersByMissedVotes.push(sortMembersByMissedVotes[l]);
+                bottom10PctMembersByMissedVotes.push(sortMembersByMissedVotes[l]);
             }
         }
     }
 }
-getBottomAndTop10PctAttendance(sortMembersByMissedVotes(), true);
-getBottomAndTop10PctAttendance(sortMembersByMissedVotes(), false);
-
 //TABLES
-
-function createTopTable() {
+function createTopTable(statistics, idname) {
     var parties = statistics.parties
     for (var i = 0; i < parties.length; i++) {
         var tableRow = document.createElement("tr");
@@ -149,10 +136,10 @@ function createTopTable() {
             tableCell.append(cells[j]);
             tableRow.append(tableCell);
         }
-        document.getElementById("topTableBody").append(tableRow);
+        document.getElementById(idname).append(tableRow);
     }
 }
-createTopTable();
+
 
 function createLeastAndMostEngagedTable(idname, arr) {
     for (var i = 0; i < arr.length; i++) {
@@ -176,5 +163,3 @@ function createLeastAndMostEngagedTable(idname, arr) {
         document.getElementById(idname).append(tableRow);
     }
 }
-createLeastAndMostEngagedTable("leastEngagedtbody",bottom10PctMembersByMissedVotes);
-createLeastAndMostEngagedTable("mostEngagedBody",top10PctMembersByMissedVotes);

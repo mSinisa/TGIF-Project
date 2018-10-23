@@ -1,5 +1,5 @@
-var membersHouse = dataHouse.results[0].members;
-
+var membersHouse;
+var url = "https://api.propublica.org/congress/v1/113/house/members.json";
 //TOTAL NUMBER OF MEMBERS
 var democrats = [];
 var republicans = [];
@@ -8,8 +8,38 @@ var independents = [];
 var allDemocratsVotedPercantages = [];
 var allRepublicansVotedPercantages = [];
 var allIndependentsVotedPercantages = [];
+//PARTY LOYALTY 10% 
+var statisticsHouse;
+var bottom10PctMembersByVotesWithPartyHouse = [];
+var top10PctMembersByVotesWithPartyHouse = [];
 
-function getMembersFromParties() {
+
+fetch(url, {
+        headers: {
+            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+        }
+    })
+    .then(function (data) {
+        return data.json();
+    })
+    .then(function (myData) {
+        console.log(myData);
+        membersHouse = myData.results[0].members;
+
+        getMembersFromParties(membersHouse);
+        fillTheObject();
+        partyPctVoted(allDemocratsVotedPercantages);
+        partyPctVoted(allRepublicansVotedPercantages);
+        partyPctVoted(allIndependentsVotedPercantages);
+        getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse(), true);
+        getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse(), false);
+        createLeastAndMostLoyalTables("houseLeastLoyalTable", bottom10PctMembersByVotesWithPartyHouse);
+        createLeastAndMostLoyalTables("houseMostLoyalTable", top10PctMembersByVotesWithPartyHouse);
+        createTopTableHouse(statisticsHouse, "houseLoyaltyTable");
+
+    })
+
+function getMembersFromParties(membersHouse) {
     //loop through all members 
     for (var i = 0; i < membersHouse.length; i++) {
         //if they are democrats
@@ -27,32 +57,33 @@ function getMembersFromParties() {
         }
     }
 }
-getMembersFromParties();
 
-var statisticsHouse = {
-    "parties": [
-        {
-            "party": "Democrats",
-            "number_of_members": democrats.length,
-            "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
+function fillTheObject() {
+    statisticsHouse = {
+        "parties": [
+            {
+                "party": "Democrats",
+                "number_of_members": democrats.length,
+                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
         },
-        {
-            "party": "Republicans",
-            "number_of_members": republicans.length,
-            "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
+            {
+                "party": "Republicans",
+                "number_of_members": republicans.length,
+                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
         },
-        {
-            "party": "Independents",
-            "number_of_members": independents.length,
-            "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
+            {
+                "party": "Independents",
+                "number_of_members": independents.length,
+                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
         }
         ]
+    }
 }
 
 function partyPctVoted(arr) {
     var sum = 0;
     if (arr.length === 0) {
-        return ("% "+ 0.00);
+        return ("% " + 0.00);
     } else {
         for (var i = 0; i < arr.length; i++) {
             sum = sum + arr[i];
@@ -61,9 +92,7 @@ function partyPctVoted(arr) {
     var average = "% " + Math.round(sum / arr.length);
     return average;
 }
-partyPctVoted(allDemocratsVotedPercantages);
-partyPctVoted(allRepublicansVotedPercantages);
-partyPctVoted(allIndependentsVotedPercantages);
+
 
 //sort array of members by votes with party pct
 function sortMembersByVotesWithPartyPctHouse() {
@@ -73,9 +102,7 @@ function sortMembersByVotesWithPartyPctHouse() {
     });
     return allMembers;
 }
-//PARTY LOYALTY 10%  
-var bottom10PctMembersByVotesWithPartyHouse = [];
-var top10PctMembersByVotesWithPartyHouse = [];
+
 
 function getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse, acc) {
     //calculate 10percent of members and round the number to have a cut off point
@@ -86,13 +113,13 @@ function getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse, a
         }
 
         for (var j = num; j < sortMembersByVotesWithPartyPctHouse.length; j++) {
-            if (sortMembersByVotesWithPartyPctHouse[j].votes_with_party_pct === sortMembersByVotesWithPartyPctHouse[num-1].missed_votes_pct) {
+            if (sortMembersByVotesWithPartyPctHouse[j].votes_with_party_pct === sortMembersByVotesWithPartyPctHouse[num - 1].missed_votes_pct) {
                 bottom10PctMembersByVotesWithPartyHouse.push(sortMembersByVotesWithPartyPctHouse[j]);
             }
         }
     } else {
 
-        for (var k = sortMembersByVotesWithPartyPctHouse.length - 1; k > sortMembersByVotesWithPartyPctHouse.length - num-1; k--) {
+        for (var k = sortMembersByVotesWithPartyPctHouse.length - 1; k > sortMembersByVotesWithPartyPctHouse.length - num - 1; k--) {
             top10PctMembersByVotesWithPartyHouse.push(sortMembersByVotesWithPartyPctHouse[k]);
         }
         for (var l = sortMembersByVotesWithPartyPctHouse.length - num - 1; l > 0; l--) {
@@ -102,10 +129,9 @@ function getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse, a
         }
     }
 }
-getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse(), true);
-getBottomAndTop10PctLoyaltyHouse(sortMembersByVotesWithPartyPctHouse(), false);
+
 //TABLES
-function createTopTableHouse(idname) {
+function createTopTableHouse(statisticsHouse, idname) {
     var parties = statisticsHouse.parties
     for (var i = 0; i < parties.length; i++) {
         var tableRow = document.createElement("tr");
@@ -121,7 +147,7 @@ function createTopTableHouse(idname) {
         document.getElementById(idname).append(tableRow);
     }
 }
-createTopTableHouse("houseLoyaltyTable");
+
 
 function createLeastAndMostLoyalTables(idname, arr) {
     for (var i = 0; i < arr.length; i++) {
@@ -145,5 +171,3 @@ function createLeastAndMostLoyalTables(idname, arr) {
         document.getElementById(idname).append(tableRow);
     }
 }
-createLeastAndMostLoyalTables("houseLeastLoyalTable",bottom10PctMembersByVotesWithPartyHouse);
-createLeastAndMostLoyalTables("houseMostLoyalTable",top10PctMembersByVotesWithPartyHouse);

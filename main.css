@@ -1,4 +1,10 @@
 /**** DEFAULTS *****/
+body{
+
+  background: linear-gradient(rgba(245, 244, 245, 0.9), rgba(245, 244, 245, 0.9)),
+    url(images/image.jpg);
+background-attachment: fixed;
+}
 .centerText {
     text-align: center;
 }
@@ -26,7 +32,7 @@
 }
 
 .navBar {
-    background-color: gray;
+    background-color: rgb(16, 57, 134);
     height: 60px;
     margin-bottom: 30px;
 }
@@ -62,7 +68,7 @@ nav a {
 }
 
 .houseImg {
-    background-image: url(images/congress_seal.png);
+    background: url(images/congress_seal.png);
     background-repeat: no-repeat;
     background-position: right;
     background-size: contain;
@@ -131,6 +137,10 @@ width:33%;
 }
 .widthTHsmall{
 width:25%;
+}
+
+hr{
+margin-bottom: 30px;
 }
 
 /***** FOOTER *******/
