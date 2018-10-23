@@ -1,23 +1,23 @@
-//var membersHouse = dataHouse.results[0].members;
-
 var membersHouse;
 var url = "https://api.propublica.org/congress/v1/113/house/members.json";
 //AJAX - Asincrone, this code needs some time to execute.  
 fetch(url, {
-       headers: {
-           "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
-       }
-   })
-   .then(function (data) {
-       return data.json();
-   })
-   .then(function (myData) {
-       console.log(myData);
-       membersHouse = myData.results[0].members;
-    createTableHouse();
-    showMemberDropDown(membersHouse);
-    createStates();
-})
+        headers: {
+            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+        }
+    })
+    .then(function (data) {
+        return data.json();
+    })
+    .then(function (myData) {
+        console.log(myData);
+        membersHouse = myData.results[0].members;
+        createTableHouse();
+        showMemberDropDown(membersHouse);
+        createStates();
+        addEventListenerToCheckboxes();
+        addEventListenerToDropDown();
+    })
 
 function createTableHouse() {
     var tableBodyHouse = document.getElementById("tableBodyHouse");
@@ -56,12 +56,12 @@ function createTableHouse() {
     }
 }
 
-
-
-
-document.querySelectorAll("input[name=Party]")[0].addEventListener("click", createTableHouse);
-document.querySelectorAll("input[name=Party]")[1].addEventListener("click", createTableHouse);
-document.querySelectorAll("input[name=Party]")[2].addEventListener("click", createTableHouse);
+function addEventListenerToCheckboxes() {
+    var checkboxes = document.querySelectorAll('input[type=checkbox]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener("click", createTableHouse);
+    }
+}
 
 function showMember(member) {
     var options = document.getElementById("dropDownBody").value;
@@ -80,9 +80,7 @@ function showMember(member) {
     return false;
 }
 
-
 // DROPDOWN **************
-
 function showMemberDropDown(member) {
     var options = document.getElementById("dropDownBody").value;
     if (options === member.state || options === "All") {
@@ -90,8 +88,9 @@ function showMemberDropDown(member) {
     }
 }
 
-
-document.getElementById("dropDownBody").addEventListener("change", createTableHouse);
+function addEventListenerToDropDown() {
+    document.getElementById("dropDownBody").addEventListener("change", createTableHouse);
+}
 
 function createStates() {
     var filteredStates = [];
@@ -110,5 +109,3 @@ function createStates() {
         dropDownOptions.appendChild(option);
     }
 }
-
-

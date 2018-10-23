@@ -1,27 +1,30 @@
-//var members = data.results[0].members;
-//API key-B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O
 var members;
 var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
 //AJAX - Asincrone, this code needs some time to execute.  
 fetch(url, {
-       headers: {
-           "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
-       }
-   })
-   .then(function (data) {
-       return data.json();
-   })
-   .then(function (myData) {
-       console.log(myData);
-       members = myData.results[0].members; 
-createTable();
-showMemberDropDown(members);
-createStates();
-})
+        headers: {
+            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+        }
+    })
+    .then(function (data) {
+        return data.json();
+    })
+    .then(function (myData) {
+        members = myData.results[0].members;
+        createTable();
+        showMemberDropDown(members);
+        createStates();
+        addEventListenerToCheckboxes();
+        addEventListenerToDropDown();
+    })
+
+var app = new Vue({  
+  el: '#app',  
+  data: {     
+  }
+}); 
 
 //SENATE TABLE
-
-
 function createTable() {
     var tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
@@ -37,7 +40,6 @@ function createTable() {
         }
         var lastName = members[i].last_name;
         var completeName = firstName + " " + middleName + " " + lastName;
-
         var link = document.createElement("a");
         link.setAttribute("href", members[i].url);
         //    completeName.link = members[i].url;
@@ -47,7 +49,6 @@ function createTable() {
         var seniority = members[i].seniority;
         var votesParty = "% " + members[i].votes_with_party_pct;
         var cells = [link, party, state, seniority, votesParty];
-
         if (showMember(members[i])) {
             for (var j = 0; j < cells.length; j++) {
                 var tableCell = document.createElement("td");
@@ -59,13 +60,13 @@ function createTable() {
     }
 }
 
-
-
 //SENATE CHECKBOXES
-
-document.querySelectorAll("input[name=Party]")[0].addEventListener("click", createTable);
-document.querySelectorAll("input[name=Party]")[1].addEventListener("click", createTable);
-document.querySelectorAll("input[name=Party]")[2].addEventListener("click", createTable);
+function addEventListenerToCheckboxes() {
+    var checkboxes = document.querySelectorAll('input[type=checkbox]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener("click", createTable);
+    }
+}
 
 function showMember(member) {
     var options = document.getElementById("dropDownBody").value;
@@ -92,8 +93,9 @@ function showMemberDropDown(member) {
     }
 }
 
-
-document.getElementById("dropDownBody").addEventListener("change", createTable);
+function addEventListenerToDropDown() {
+    document.getElementById("dropDownBody").addEventListener("change", createTable);
+}
 
 function createStates() {
     var filteredStates = [];
@@ -112,4 +114,3 @@ function createStates() {
         dropDownOptions.appendChild(option);
     }
 }
-
