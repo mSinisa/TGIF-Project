@@ -57,26 +57,34 @@ function getMembersFromParties(obj) {
 }
 
 function fillTheObject() {
-     statistics = {
+    statistics = {
         "parties": [
             {
                 "party": "Democrats",
                 "number_of_members": democrats.length,
-                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
+                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)+" %"
         },
             {
                 "party": "Republicans",
                 "number_of_members": republicans.length,
-                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
+                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages) + " %"
         },
             {
                 "party": "Independents",
                 "number_of_members": independents.length,
-                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
-        }
+                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages) + " %"
+        },
+            {
+                "party": "Total",
+                "number_of_members": democrats.length + republicans.length + independents.length,
+                "votes_with_party_pct": 0
+            }
         ]
     }
+
+    getTotalAvgPercentage(statistics);
 }
+
 
 ////FUNCTIONS
 function partyPctVoted(arr) {
@@ -84,7 +92,7 @@ function partyPctVoted(arr) {
     for (var i = 0; i < arr.length; i++) {
         sum = sum + arr[i];
     }
-    var average = "% " + Math.round(sum / arr.length);
+    var average = Math.round(sum / arr.length);
     return average;
 }
 
@@ -153,7 +161,7 @@ function createLeastAndMostEngagedTable(idname, arr) {
         var lastName = arr[i].last_name;
         var completeName = firstName + " " + middleName + " " + lastName;
         var numMissedVotes = arr[i].missed_votes;
-        var pctMissedVotes = "% " + arr[i].missed_votes_pct;
+        var pctMissedVotes = arr[i].missed_votes_pct + " %";
         var cells = [completeName, numMissedVotes, pctMissedVotes];
         for (var j = 0; j < cells.length; j++) {
             var tableCell = document.createElement("td");
@@ -161,5 +169,13 @@ function createLeastAndMostEngagedTable(idname, arr) {
             tableRow.append(tableCell);
         }
         document.getElementById(idname).append(tableRow);
+    }
+}
+
+function getTotalAvgPercentage(statistics) {
+    if (statistics.parties[2].number_of_members == 0) {
+        statistics.parties[3].votes_with_party_pct = (((partyPctVoted(allDemocratsVotedPercantages) + partyPctVoted(allRepublicansVotedPercantages)) / 2)+ " %") ;
+    } else {
+        statistics.parties[3].votes_with_party_pct = (((partyPctVoted(allDemocratsVotedPercantages) + partyPctVoted(allRepublicansVotedPercantages) + partyPctVoted(allIndependentsVotedPercantages)) / 3)+ " %")
     }
 }

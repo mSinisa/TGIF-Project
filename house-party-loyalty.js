@@ -64,32 +64,38 @@ function fillTheObject() {
             {
                 "party": "Democrats",
                 "number_of_members": democrats.length,
-                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages)
+                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages) + " %"
         },
             {
                 "party": "Republicans",
                 "number_of_members": republicans.length,
-                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages)
+                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages) + " %"
         },
             {
                 "party": "Independents",
                 "number_of_members": independents.length,
-                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages)
-        }
+                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages) + " %"
+        },
+            {
+                "party": "Total",
+                "number_of_members": democrats.length + republicans.length + independents.length,
+                "votes_with_party_pct": 0
+            }
         ]
     }
+    getTotalAvgPercentage(statisticsHouse);
 }
 
 function partyPctVoted(arr) {
     var sum = 0;
     if (arr.length === 0) {
-        return ("% " + 0.00);
+        return (0.00);
     } else {
         for (var i = 0; i < arr.length; i++) {
             sum = sum + arr[i];
         }
     }
-    var average = "% " + Math.round(sum / arr.length);
+    var average =Math.round(sum / arr.length);
     return average;
 }
 
@@ -161,7 +167,7 @@ function createLeastAndMostLoyalTables(idname, arr) {
         var lastName = arr[i].last_name;
         var completeName = firstName + " " + middleName + " " + lastName;
         var numMissedVotes = arr[i].total_votes;
-        var pctMissedVotes = "% " + arr[i].votes_with_party_pct;
+        var pctMissedVotes = arr[i].votes_with_party_pct + " %";
         var cells = [completeName, numMissedVotes, pctMissedVotes];
         for (var j = 0; j < cells.length; j++) {
             var tableCell = document.createElement("td");
@@ -169,5 +175,13 @@ function createLeastAndMostLoyalTables(idname, arr) {
             tableRow.append(tableCell);
         }
         document.getElementById(idname).append(tableRow);
+    }
+}
+
+function getTotalAvgPercentage(statisticsHouse) {
+    if (statisticsHouse.parties[2].number_of_members == 0) {
+        statisticsHouse.parties[3].votes_with_party_pct = (((partyPctVoted(allDemocratsVotedPercantages) + partyPctVoted(allRepublicansVotedPercantages)) / 2)+ " %") ;
+    } else {
+        statisticsHouse.parties[3].votes_with_party_pct = (((partyPctVoted(allDemocratsVotedPercantages) + partyPctVoted(allRepublicansVotedPercantages) + partyPctVoted(allIndependentsVotedPercantages)) / 3)+ " %")
     }
 }
