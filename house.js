@@ -10,14 +10,25 @@ fetch(url, {
         return data.json();
     })
     .then(function (myData) {
-        console.log(myData);
         membersHouse = myData.results[0].members;
-        createTableHouse();
+//        createTableHouse();
         showMemberDropDown(membersHouse);
         createStates();
         addEventListenerToCheckboxes();
         addEventListenerToDropDown();
+        app.congressmen=membersHouse;
     })
+
+var app = new Vue({
+    el: "#app",
+    data: {
+    congressmen:[]
+    },
+    methods:{
+},
+    computed:{
+}
+});
 
 function createTableHouse() {
     var tableBodyHouse = document.getElementById("tableBodyHouse");

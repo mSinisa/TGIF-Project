@@ -11,18 +11,74 @@ fetch(url, {
     })
     .then(function (myData) {
         members = myData.results[0].members;
-        createTable();
-        showMemberDropDown(members);
-        createStates();
-        addEventListenerToCheckboxes();
-        addEventListenerToDropDown();
+        //createTable();
+        //showMemberDropDown(members);
+        //createStates();
+        //addEventListenerToCheckboxes();
+        //addEventListenerToDropDown();
+        app.senators = members;
     })
 
-var app = new Vue({  
-  el: '#app',  
-  data: {     
-  }
-}); 
+var app = new Vue({
+    el: "#app",
+    data: {
+        senators: [],
+        checkedCheckboxes: [],
+        options: "All"
+
+    },
+    methods: {
+
+    },
+
+computed: {
+    states: function () {
+        return [...new Set(this.senators.map((senator) => senator.state).sort())]
+    },
+    
+     filterCheckedMembers: function () {
+            var filteredMembers = [];
+            if (this.checkedCheckboxes.length === 0 && this.options === "All") {
+                return this.senators;
+            } else {
+                for (var i = 0; i < this.senators.length; i++) {
+                    if (this.checkedCheckboxes.length === 0 && (this.options === "All" || this.options === this.senators[i].state)) {
+                        filteredMembers.push(this.senators[i]);
+                    } else {
+                        for (var j = 0; j < this.checkedCheckboxes.length; j++) {
+                            if ((this.senators[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.senators[i].state)) {
+                                filteredMembers.push(this.senators[i]);
+                            }
+                        }
+                    }
+                }
+                return filteredMembers;
+            }
+        }
+}
+});
+
+//        function filterCheckedMembers(membersSenate) {
+//    var checkedCheckboxes = document.querySelectorAll('input[type=checkbox]:checked');
+//    var filteredMembers = [];
+//    var options = document.getElementById("dropDownBody").value;
+//    if (checkedCheckboxes.length === 0 && options === "All") {
+//        return membersSenate;
+//    } else {
+//        for (var i = 0; i < membersSenate.length; i++) {
+//            if (checkedCheckboxes.length === 0 && (options === "All" || options === membersSenate[i].state)) {
+//                filteredMembers.push(membersSenate[i]);
+//            } else {
+//                for (var j = 0; j < checkedCheckboxes.length; j++) {
+//                    if (((membersSenate[i].party === checkedCheckboxes[j].value) && (options === "All" || options === membersSenate[i].state))) {
+//                        filteredMembers.push(membersSenate[i]);
+//                    }
+//                }
+//            }
+//        }
+//        return filteredMembers;
+//    }
+//}
 
 //SENATE TABLE
 function createTable() {
@@ -47,7 +103,7 @@ function createTable() {
         var party = members[i].party;
         var state = members[i].state;
         var seniority = members[i].seniority;
-        var votesParty = "% " + members[i].votes_with_party_pct;
+        var votesParty = members[i].votes_with_party_pct + " %";
         var cells = [link, party, state, seniority, votesParty];
         if (showMember(members[i])) {
             for (var j = 0; j < cells.length; j++) {
@@ -60,13 +116,13 @@ function createTable() {
     }
 }
 
-//SENATE CHECKBOXES
-function addEventListenerToCheckboxes() {
-    var checkboxes = document.querySelectorAll('input[type=checkbox]');
-    for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener("click", createTable);
-    }
-}
+////SENATE CHECKBOXES
+//function addEventListenerToCheckboxes() {
+//    var checkboxes = document.querySelectorAll('input[type=checkbox]');
+//    for (var i = 0; i < checkboxes.length; i++) {
+//        checkboxes[i].addEventListener("click", createTable);
+//    }
+//}
 
 function showMember(member) {
     var options = document.getElementById("dropDownBody").value;
@@ -93,24 +149,22 @@ function showMemberDropDown(member) {
     }
 }
 
-function addEventListenerToDropDown() {
-    document.getElementById("dropDownBody").addEventListener("change", createTable);
-}
-
-function createStates() {
-    var filteredStates = [];
-    for (i = 0; i < members.length; i++) {
-        if (filteredStates.indexOf(members[i].state) == -1) {
-            filteredStates.push(members[i].state);
-            filteredStates.sort();
-        }
-    }
-    for (var j = 0; j < filteredStates.length; j++) {
-        var option = document.createElement("option");
-        option.classList.add("stateOptions");
-        option.setAttribute("value", filteredStates[j]);
-        option.innerHTML = filteredStates[j];
-        var dropDownOptions = document.getElementById("dropDownBody");
-        dropDownOptions.appendChild(option);
-    }
-}
+//function addEventListenerToDropDown() {    document.getElementById("dropDownBody").addEventListener("change", createTable);
+//}
+//function createStates() {
+//    var filteredStates = [];
+//    for (i = 0; i < members.length; i++) {
+//        if (filteredStates.indexOf(members[i].state) == -1) {
+//            filteredStates.push(members[i].state);
+//            filteredStates.sort();
+//        }
+//    }
+//    for (var j = 0; j < filteredStates.length; j++) {
+//        var option = document.createElement("option");
+//        option.classList.add("stateOptions");
+//        option.setAttribute("value", filteredStates[j]);
+//        option.innerHTML = filteredStates[j];
+//        var dropDownOptions = document.getElementById("dropDownBody");
+//        dropDownOptions.appendChild(option);
+//    }
+//}
