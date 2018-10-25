@@ -1,42 +1,50 @@
-var members;
-var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+//var members;
+//var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
 //AJAX - Asincrone, this code needs some time to execute.  
-fetch(url, {
-        headers: {
-            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
-        }
-    })
-    .then(function (data) {
-        return data.json();
-    })
-    .then(function (myData) {
-        members = myData.results[0].members;
-        //createTable();
-        //showMemberDropDown(members);
-        //createStates();
-        //addEventListenerToCheckboxes();
-        //addEventListenerToDropDown();
-        app.senators = members;
-    })
-
 var app = new Vue({
     el: "#app",
+    
     data: {
+
+        url: "https://api.propublica.org/congress/v1/113/senate/members.json",
         senators: [],
         checkedCheckboxes: [],
         options: "All"
 
     },
+
     methods: {
 
+        getData: function () {
+            console.log(this);
+            fetch(this.url, {
+                    headers: {
+                        "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+                    }
+                })
+                .then(function (data) {
+                    return data.json();
+                })
+                .then(function (myData) {
+                    //members = myData.results[0].members;
+                    //createTable();
+                    //showMemberDropDown(members);
+                    //createStates();
+                    //addEventListenerToCheckboxes();
+                    //addEventListenerToDropDown();
+                console.log(this);
+                    app.senators = myData.results[0].members;
+                })
+        }
+
     },
 
-computed: {
-    states: function () {
-        return [...new Set(this.senators.map((senator) => senator.state).sort())]
-    },
-    
-     filterCheckedMembers: function () {
+    computed: {
+        states: function () {
+            return [...new Set(this.senators.map((senator) => senator.state).sort())]
+        },
+
+        filterCheckedMembers: function () {
             var filteredMembers = [];
             if (this.checkedCheckboxes.length === 0 && this.options === "All") {
                 return this.senators;
@@ -55,7 +63,11 @@ computed: {
                 return filteredMembers;
             }
         }
-}
+    },
+
+    created: function() {
+        this.getData();
+    }
 });
 
 //        function filterCheckedMembers(membersSenate) {

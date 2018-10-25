@@ -44,10 +44,9 @@ nav a {
 /**** INDEX PAGE *****/
 .card-header:first-child {
     height: 60px;
-    background: white;
+    background: rgb(255, 255, 255);
     display: flex;
     align-items: center;
-
 }
 
 .card {
