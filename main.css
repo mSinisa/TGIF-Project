@@ -1,9 +1,20 @@
 /**** DEFAULTS *****/
 body {
-
     background: linear-gradient(rgba(245, 244, 245, 0.95), rgba(245, 244, 245, 0.95)),
         url(images/image.jpg);
     background-attachment: fixed;
+}
+
+.redColor {
+    color: #b7211b;
+}
+
+.logoDot {
+    color: rgb(16, 57, 134);
+}
+
+.blueColor {
+    color: rgb(16, 57, 134);
 }
 
 .centerText {
@@ -26,11 +37,10 @@ body {
     padding: 5px 0;
 }
 
-
 .emailLink {
     font-size: 25px;
-    border-bottom: 1px dotted;
-    color: black;
+    border-bottom: 1px dotted rgb(16, 57, 134);
+    color: #b7211b;
 }
 
 .navBar {
@@ -41,7 +51,7 @@ body {
 
 nav a {
     color: white;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 /**** INDEX PAGE *****/
@@ -57,12 +67,50 @@ nav a {
     background-color: transparent;
 }
 
+.card-body {
+    padding: 15px 0 0 0;
+}
+
+.card-header {
+    border-bottom: 1px dotted;
+    color: rgb(16, 57, 134);
+    padding: 0;
+}
+
+#moreText {
+    display: none;
+}
+
+#moreText2 {
+    display: none;
+}
+
+.readButton {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: rgb(16, 57, 134);
+    font-weight: 500;
+}
+
 .accordion .card:not(:first-of-type) .card-header:first-child {
     height: 60px;
     background: transparent;
     display: flex;
     align-items: center;
+}
 
+button.btn {
+    color: #b7211b;
+    padding: 0;
+}
+
+.homeImage {
+    background: url(images/2000px-US-WhiteHouse-Logo.svg.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: contain;
+    height: 350px;
 }
 
 /****** HOUSE AND SENATE TABLE FILTER PAGES******/
@@ -70,14 +118,14 @@ nav a {
     padding-left: 0;
 }
 
-.labelMoreVisible{
-font-weight: bold;
-color:#b7211b;
-font-size: 20px;
+.labelMoreVisible {
+    font-weight: bold;
+    color: #b7211b;
+    font-size: 20px;
 }
 
-.labelColor{
-    color:#b7211b;
+.labelColor {
+    color: rgb(16, 57, 134);
     font-size: 18px;
 }
 
@@ -115,9 +163,21 @@ font-size: 20px;
     height: 30px;
     width: 60px;
     margin-left: 10px;
+    background-color: transparent;
+    border: 1px dotted rgb(16, 57, 134);
 }
 
 /**************/
+.headlineColorBorder {
+    color: #b7211b;
+    border-bottom: 1px dotted rgb(16, 57, 134);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+h4.headlineColorBorder {
+    margin-top: 20px;
+}
 
 table.tableDisplay {
     line-height: 10px;
@@ -127,16 +187,17 @@ table.tableDisplay td {
     text-align: center;
     vertical-align: middle;
 }
+
 /*#b7211b*/
 table.table-hover tbody tr:hover {
-    background-color: rgba(183, 33, 27, 0.26); 
+    background-color: rgba(183, 33, 27, 0.26);
 }
 
 table.tableDisplay th {
     text-align: center;
     vertical-align: middle;
     background-color: rgb(16, 57, 134);
-    color: white;    
+    color: white;
 }
 
 table.tableDisplay thead {
