@@ -1,183 +1,138 @@
-var members;
-var url = "https://api.propublica.org/congress/v1/113/senate/members.json";
-//TOTAL NUMBER OF MEMBERS
-var democrats = [];
-var republicans = [];
-var independents = [];
-//VOTED WITH PARTY ALL PERCENTAGES
-var allDemocratsVotedPercantages = [];
-var allRepublicansVotedPercantages = [];
-var allIndependentsVotedPercantages = [];
-//PARTY ENGAGEDMENT 10% ATTENDANCE
-var statistics;
-var bottom10PctMembersByVotesWithParty = [];
-var top10PctMembersByVotesWithParty = [];
+var app = new Vue({
+    
+    el: "#app",
 
-fetch(url, {
-        headers: {
-            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
-        }
-    })
-    .then(function (data) {
-        return data.json();
-    })
-    .then(function (myData) {
-        var members = myData.results[0].members;
+    data: {
 
-        getMembersFromParties(members);
-        fillTheObject();
-        partyPctVoted(allDemocratsVotedPercantages);
-        partyPctVoted(allRepublicansVotedPercantages);
-        partyPctVoted(allIndependentsVotedPercantages);
-        getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct(members), true);
-        getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct(members), false);
-        createLeastAndMostLoyalTables("senateLeastLoyalTable", bottom10PctMembersByVotesWithParty);
-        createLeastAndMostLoyalTables("senateMostLoyalTable", top10PctMembersByVotesWithParty);
-        createTopTable(statistics, "senateLoyaltyTable");
-    })
+        url: "https://api.propublica.org/congress/v1/113/senate/members.json",
+        senators: [],
+        statistics: {
 
-
-function getMembersFromParties(members) {
-    //loop through all members 
-    for (var i = 0; i < members.length; i++) {
-        //if they are democrats
-        if (members[i].party === "D") {
-            //make an array of democrats
-            democrats.push(members[i]);
-            //make an array or percentage votes for democrats
-            allDemocratsVotedPercantages.push(members[i].votes_with_party_pct);
-        } else if (members[i].party === "R") {
-            republicans.push(members[i]);
-            allRepublicansVotedPercantages.push(members[i].votes_with_party_pct);
-        } else {
-            independents.push(members[i]);
-            allIndependentsVotedPercantages.push(members[i].votes_with_party_pct);
-        }
-    }
-}
-
-function fillTheObject() {
-    statistics = {
-        "parties": [
-            {
-                "party": "Democrats",
-                "number_of_members": democrats.length,
-                "votes_with_party_pct": partyPctVoted(allDemocratsVotedPercantages) + " %"
+            "parties": [
+                {
+                    "party": "Democrats",
+                    "number_of_members": 0,
+                    "votes_with_party_pct": 0
         },
-            {
-                "party": "Republicans",
-                "number_of_members": republicans.length,
-                "votes_with_party_pct": partyPctVoted(allRepublicansVotedPercantages) + " %"
+                {
+                    "party": "Republicans",
+                    "number_of_members": 0,
+                    "votes_with_party_pct": 0
         },
-            {
-                "party": "Independents",
-                "number_of_members": independents.length,
-                "votes_with_party_pct": partyPctVoted(allIndependentsVotedPercantages) + " %"
+                {
+                    "party": "Independents",
+                    "number_of_members": 0,
+                    "votes_with_party_pct": 0
         },
-            {
-                "party": "Total",
-                "number_of_members": democrats.length + republicans.length + independents.length,
-                "votes_with_party_pct": 0
+                {
+                    "party": "Total",
+                    "number_of_members": 0,
+                    "votes_with_party_pct": 0
             }
         ]
-    }
-    getTotalAvgPercentage(statistics);
-}
+        },
 
-function partyPctVoted(arr) {
-    var sum = 0;
-    for (var i = 0; i < arr.length; i++) {
-        sum = sum + arr[i];
-    }
-    var average = Math.round(sum / arr.length);
-    return average;
-}
+        bottom10Pct: [],
+        top10Pct: []
 
+    },
 
-//sort array of members by votes with party pct
-function sortMembersByVotesWithPartyPct(members) {
-    var allMembers = Array.from(members);
-    allMembers.sort(function (a, b) {
-        return (a.votes_with_party_pct > b.votes_with_party_pct) ? 1 : ((b.votes_with_party_pct > a.votes_with_party_pct) ? -1 : 0);
-    });
-    return allMembers;
-}
+    methods: {
 
-//PARTY LOYALTY 10%  
+        getData: function () {
+            fetch(this.url, {
+                    headers: {
+                        "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+                    }
+                })
+                .then(function (data) {
+                    return data.json();
+                })
+                .then(function (myData) {
+                    app.senators = myData.results[0].members;
+                    app.getTopTableInfo();
+                    app.getBottomAndTop10Pct(true);
+                    app.getBottomAndTop10Pct(false);
 
+                })
+        },
 
-function getBottomAndTop10PctLoyalty(sortMembersByVotesWithPartyPct, acc) {
-    //calculate 10percent of members and round the number to have a cut off point
-    var num = Math.round(sortMembersByVotesWithPartyPct.length * 0.1);
-    if (acc) {
-        for (var i = 0; i < num; i++) {
-            bottom10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[i]);
-        }
+        getTopTableInfo: function () {
+            //run a loop through all senators
+            for (var i = 0; i < this.senators.length; i++) {
+                //if they are democrats 
+                if (this.senators[i].party === "D") {
+                    //access their location in statistics and start adding each member to the total
+                    this.statistics.parties[0].number_of_members += 1;
+                    //also locate the votes with party pct in the object and start adding all percentages
+                    this.statistics.parties[0].votes_with_party_pct += this.senators[i].votes_with_party_pct;
+                } else if (this.senators[i].party === "R") {
+                    this.statistics.parties[1].number_of_members += 1;
+                    this.statistics.parties[1].votes_with_party_pct += this.senators[i].votes_with_party_pct;
+                } else if (this.senators[i].party === "I") {
+                    this.statistics.parties[2].number_of_members += 1;
+                    this.statistics.parties[2].votes_with_party_pct += this.senators[i].votes_with_party_pct;
+                }
+                //total that adds all party percentages-later we will need to divide it by number of mem for avg
+                this.statistics.parties[3].votes_with_party_pct += this.senators[i].votes_with_party_pct;
+            }
+            //dividing total percentages number by number of members to get the avg pct and add toFixed to round
+            //the number and add a string with %
+            this.statistics.parties[0].votes_with_party_pct = (this.statistics.parties[0].votes_with_party_pct / this.statistics.parties[0].number_of_members).toFixed();
+            this.statistics.parties[1].votes_with_party_pct = (this.statistics.parties[1].votes_with_party_pct / this.statistics.parties[1].number_of_members).toFixed();
+            this.statistics.parties[2].votes_with_party_pct = (this.statistics.parties[2].votes_with_party_pct / this.statistics.parties[2].number_of_members).toFixed();
+            //total number of members= senators array lenght
+            this.statistics.parties[3].number_of_members = this.senators.length;
+            //since independents might be equal to 0 adding an if statement for it
+            if (this.statistics.parties[2].number_of_members == 0) {
+                this.statistics.parties[3].votes_with_party_pct = ((this.statistics.parties[0].votes_with_party_pct + this.statistics.parties[1].votes_with_party_pct) / 2).toFixed();
+            } else {
+                this.statistics.parties[3].votes_with_party_pct = (this.statistics.parties[3].votes_with_party_pct / this.senators.length).toFixed();
+            }
+        },
 
-        for (var j = num; j < sortMembersByVotesWithPartyPct.length; j++) {
-            if (sortMembersByVotesWithPartyPct[j].votes_with_party_pct === sortMembersByVotesWithPartyPct[num - 1].missed_votes_pct) {
-                bottom10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[j]);
+        getBottomAndTop10Pct: function (acc) {
+            //sort array or senators by missed votes pct
+            var sortedSenators = Array.from(this.senators);
+            sortedSenators.sort(function (a, b) {
+                return (a.votes_with_party_pct > b.votes_with_party_pct) ? 1 : ((b.votes_with_party_pct > a.votes_with_party_pct) ? -1 : 0);
+            });
+            //calculate 10percent of members and round the number to have a cut off point
+            var num = Math.round(sortedSenators.length * 0.1);
+            //if its acsending order
+            if (acc) {
+                for (var i = 0; i < num; i++) {
+                //push first 11 senators to top10Pct array
+                    this.bottom10Pct.push(sortedSenators[i]);
+                }
+                for (var j = num; j < sortedSenators.length; j++) {
+            //check if the 12th and onward senators have the same missed votes pct as the 11th and if they do add them to top10 array
+                    if (sortedSenators[j].votes_with_party_pct === sortedSenators[num - 1].votes_with_party_pct) {
+                        this.bottom10Pct.push(sortedSenators[j]);
+                    }
+                }
+
+            } else {
+                //starting from the back of the array conting down and getting first 11 senators into bottom10Pct array
+                for (var k = sortedSenators.length - 1; k > sortedSenators.length - num - 1; k--) {
+                    this.top10Pct.push(sortedSenators[k]);
+                }
+                for (var l = sortedSenators.length - num - 1; l > 0; l--) {
+        //check if the 12th and onward senators have the same missed votes pct as the 11th and if they do add them to bottom10 arr
+                    if (sortedSenators[l].votes_with_party_pct === sortedSenators[sortedSenators.length - num].votes_with_party_pct) {
+                        this.top10Pct.push(sortedSenators[l]);
+                    }
+                }
             }
         }
-    } else {
 
-        for (var k = sortMembersByVotesWithPartyPct.length - 1; k > sortMembersByVotesWithPartyPct.length - num - 1; k--) {
-            top10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[k]);
-        }
-        for (var l = sortMembersByVotesWithPartyPct.length - num - 1; l > 0; l--) {
-            if (sortMembersByVotesWithPartyPct[l].votes_with_party_pct === sortMembersByVotesWithPartyPct[sortMembersByVotesWithPartyPct.length - num].votes_with_party_pct) {
-                top10PctMembersByVotesWithParty.push(sortMembersByVotesWithPartyPct[l]);
-            }
-        }
+    },
+
+    computed: {
+    },
+
+    created: function () {
+        this.getData();
     }
-}
 
-//TABLES
-function createTopTable(statistics, idname) {
-    var parties = statistics.parties
-    for (var i = 0; i < parties.length; i++) {
-        var tableRow = document.createElement("tr");
-        var party = parties[i].party;
-        var numberOfReps = parties[i].number_of_members;
-        var votesWithParty = parties[i].votes_with_party_pct;
-        var cells = [party, numberOfReps, votesWithParty];
-        for (var j = 0; j < cells.length; j++) {
-            var tableCell = document.createElement("td");
-            tableCell.append(cells[j]);
-            tableRow.append(tableCell);
-        }
-        document.getElementById(idname).append(tableRow);
-    }
-}
-
-
-function createLeastAndMostLoyalTables(idname, arr) {
-    for (var i = 0; i < arr.length; i++) {
-        var tableRow = document.createElement("tr");
-        var firstName = arr[i].first_name;
-        var middleName = arr[i].middle_name;
-        //some members don't have middle names
-        if (middleName === null) {
-            middleName = "";
-        }
-        var lastName = arr[i].last_name;
-        var completeName = firstName + " " + middleName + " " + lastName;
-        var numMissedVotes = arr[i].total_votes;
-        var pctMissedVotes =arr[i].votes_with_party_pct + " %";
-        var cells = [completeName, numMissedVotes, pctMissedVotes];
-        for (var j = 0; j < cells.length; j++) {
-            var tableCell = document.createElement("td");
-            tableCell.append(cells[j]);
-            tableRow.append(tableCell);
-        }
-        document.getElementById(idname).append(tableRow);
-    }
-}
-
-function getTotalAvgPercentage(statistics) {
-    if (statistics.parties[2].number_of_members == 0) {
-        statistics.parties[3].votes_with_party_pct = (((partyPctVoted(allDemocratsVotedPercantages) + partyPctVoted(allRepublicansVotedPercantages)) / 2)+ " %") ;
-    } else {
-        statistics.parties[3].votes_with_party_pct = (((partyPctVoted(allDemocratsVotedPercantages) + partyPctVoted(allRepublicansVotedPercantages) + partyPctVoted(allIndependentsVotedPercantages)) / 3)+ " %")
-    }
-}
+});

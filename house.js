@@ -1,122 +1,63 @@
-var membersHouse;
-var url = "https://api.propublica.org/congress/v1/113/house/members.json";
-//AJAX - Asincrone, this code needs some time to execute.  
-fetch(url, {
-        headers: {
-            "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
-        }
-    })
-    .then(function (data) {
-        return data.json();
-    })
-    .then(function (myData) {
-        membersHouse = myData.results[0].members;
-//        createTableHouse();
-        showMemberDropDown(membersHouse);
-        createStates();
-        addEventListenerToCheckboxes();
-        addEventListenerToDropDown();
-        app.congressmen=membersHouse;
-    })
-
 var app = new Vue({
+
     el: "#app",
+
     data: {
-    congressmen:[]
+
+        url: "https://api.propublica.org/congress/v1/113/house/members.json",
+        congressmen: [],
+        checkedCheckboxes: [],
+        options: "All"
+
     },
-    methods:{
-},
-    computed:{
-}
-});
 
-function createTableHouse() {
-    var tableBodyHouse = document.getElementById("tableBodyHouse");
-    tableBodyHouse.innerHTML = "";
-    for (var i = 0; i < membersHouse.length; i++) {
-        //for each member build a tr
-        var tableRow = document.createElement("tr");
-        //for each row create 5 cells (full name, party, state, seniority, precentage of votes)
-        var firstName = membersHouse[i].first_name;
-        var middleName = membersHouse[i].middle_name;
-        //some members don't have middle names
-        if (middleName === null) {
-            middleName = "";
+    methods: {
+
+        getDataHouse: function () {
+            console.log(this);
+            fetch(this.url, {
+                    headers: {
+                        "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
+                    }
+                })
+                .then(function (data) {
+                    return data.json();
+                })
+                .then(function (myData) {
+                    app.congressmen = myData.results[0].members;
+                })
         }
-        var lastName = membersHouse[i].last_name;
-        var completeName = firstName + " " + middleName + " " + lastName;
+    },
 
-        var link = document.createElement("a");
-        link.setAttribute("href", membersHouse[i].url);
-        //    completeName.link = members[i].url;
-        link.innerHTML = completeName;
-        var party = membersHouse[i].party;
-        var state = membersHouse[i].state;
-        var seniority = membersHouse[i].seniority;
-        var votesParty = "% " + membersHouse[i].votes_with_party_pct;
-        var cells = [link, party, state, seniority, votesParty];
+    computed: {
 
-        if (showMember(membersHouse[i])) {
-            for (var j = 0; j < cells.length; j++) {
-                var tableCell = document.createElement("td");
-                tableCell.append(cells[j]);
-                tableRow.append(tableCell);
+        states: function () {
+            return [...new Set(this.congressmen.map((congressman) => congressman.state).sort())]
+        },
+
+        filterCheckedMembers: function () {
+            var filteredMembers = [];
+            if (this.checkedCheckboxes.length === 0 && this.options === "All") {
+                return this.congressmen;
+            } else {
+                for (var i = 0; i < this.congressmen.length; i++) {
+                    if (this.checkedCheckboxes.length === 0 && (this.options === "All" || this.options === this.congressmen[i].state)) {
+                        filteredMembers.push(this.congressmen[i]);
+                    } else {
+                        for (var j = 0; j < this.checkedCheckboxes.length; j++) {
+                            if ((this.congressmen[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.congressmen[i].state)) {
+                                filteredMembers.push(this.congressmen[i]);
+                            }
+                        }
+                    }
+                }
+                return filteredMembers;
             }
-            document.getElementById("tableBodyHouse").append(tableRow);
         }
-    }
-}
+    },
 
-function addEventListenerToCheckboxes() {
-    var checkboxes = document.querySelectorAll('input[type=checkbox]');
-    for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener("click", createTableHouse);
+    created: function () {
+        this.getDataHouse();
     }
-}
 
-function showMember(member) {
-    var options = document.getElementById("dropDownBody").value;
-    var checkboxes = document.querySelectorAll("input[name=Party]");
-    var checkedCheckboxes = document.querySelectorAll("input[name=Party]:checked");
-    if (checkedCheckboxes.length == 0 && options == "All") {
-        return true;
-    }
-    for (var j = 0; j < checkboxes.length; j++) {
-        if (checkboxes[j].checked && (member.party == checkboxes[j].value) && ((options === member.state || options === "All"))) {
-            return true;
-        } else if (checkedCheckboxes.length === 0 && options === member.state) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// DROPDOWN **************
-function showMemberDropDown(member) {
-    var options = document.getElementById("dropDownBody").value;
-    if (options === member.state || options === "All") {
-        return true;
-    }
-}
-
-function addEventListenerToDropDown() {
-    document.getElementById("dropDownBody").addEventListener("change", createTableHouse);
-}
-
-function createStates() {
-    var filteredStates = [];
-    for (i = 0; i < membersHouse.length; i++) {
-        if (filteredStates.indexOf(membersHouse[i].state) == -1) {
-            filteredStates.push(membersHouse[i].state);
-            filteredStates.sort();
-        }
-    }
-    for (var j = 0; j < filteredStates.length; j++) {
-        var option = document.createElement("option");
-        option.classList.add("stateOptions");
-        option.setAttribute("value", filteredStates[j]);
-        option.innerHTML = filteredStates[j];
-        var dropDownOptions = document.getElementById("dropDownBody");
-        dropDownOptions.appendChild(option);
-    }
-}
+});

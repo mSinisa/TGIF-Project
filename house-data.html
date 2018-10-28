@@ -68,16 +68,17 @@
             </div>
             <div class="row filterAreaContainer">
                 <div class="filterCheckboxes col-6">
-                    <label>Filter by Party:</label>
-                    <label><input type="checkbox" name="Party" value="D">Democrat</label>
-                    <label><input type="checkbox" name="Party" value="R">Republican</label>
-                    <label><input type="checkbox" name="Party" value="I">Independent</label>
+                    <label class="labelMoreVisible">Filter by Party:</label>
+                    <label class="labelColor"><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="D">Democrat</label>
+                    <label class="labelColor"><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="R">Republican</label>
+                    <label class="labelColor"><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="I">Independent</label>
                 </div>
 
                 <div class="dropdownArea col-6 d-flex justify-content-end">
-                    <label for="dropDownBody">Filter by State:
-                        <select id="dropDownBody" name="states">
+                    <label class="labelMoreVisible" for="dropDownBody">Filter by State:
+                        <select class="labelColor" id="dropDownBody" name="states" v-model="options">
                             <option value="All" selected>All</option>
+                            <option v-for="state in states">{{ state }}</option>
                         </select>
                     </label>
                 </div>
@@ -93,19 +94,19 @@
                     </tr>
                 </thead>
                 <tbody id="tableBodyHouse">
-                    <tr v-for="congressman in congressmen">
+                    <tr v-for="congressman in filterCheckedMembers">
                     <td><a v-bind:href=congressman.url>{{congressman.first_name}} {{congressman.middle_name}} {{congressman.last_name}}</a></td>
                     <td>{{congressman.party}}</td>
                     <td>{{congressman.state}}</td>
                     <td>{{congressman.seniority}}</td>
-                    <td>{{congressman.votes_with_party_pct}}</td>
+                    <td>{{congressman.votes_with_party_pct}} %</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="footer">
-            <h4 class="footerText">© 2018 TGIF | All Rights Reserved</h4>
+            <p class="footerText">© 2018 TGIF | All Rights Reserved</p>
         </div>
 
     </div>

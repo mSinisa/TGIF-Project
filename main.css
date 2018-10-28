@@ -1,10 +1,11 @@
 /**** DEFAULTS *****/
-body{
+body {
 
-  background: linear-gradient(rgba(245, 244, 245, 0.9), rgba(245, 244, 245, 0.9)),
-    url(images/image.jpg);
-background-attachment: fixed;
+    background: linear-gradient(rgba(245, 244, 245, 0.95), rgba(245, 244, 245, 0.95)),
+        url(images/image.jpg);
+    background-attachment: fixed;
 }
+
 .centerText {
     text-align: center;
 }
@@ -25,6 +26,7 @@ background-attachment: fixed;
     padding: 5px 0;
 }
 
+
 .emailLink {
     font-size: 25px;
     border-bottom: 1px dotted;
@@ -39,23 +41,25 @@ background-attachment: fixed;
 
 nav a {
     color: white;
+    font-weight: bold;
 }
 
 /**** INDEX PAGE *****/
 .card-header:first-child {
     height: 60px;
-    background: rgb(255, 255, 255);
+    background: transparent;
     display: flex;
     align-items: center;
 }
 
 .card {
     border: none;
+    background-color: transparent;
 }
 
 .accordion .card:not(:first-of-type) .card-header:first-child {
     height: 60px;
-    background: white;
+    background: transparent;
     display: flex;
     align-items: center;
 
@@ -66,8 +70,20 @@ nav a {
     padding-left: 0;
 }
 
+.labelMoreVisible{
+font-weight: bold;
+color:#b7211b;
+font-size: 20px;
+}
+
+.labelColor{
+    color:#b7211b;
+    font-size: 18px;
+}
+
+
 .houseImg {
-    background: url(images/congress_seal.png);
+    background: url(images/congress_logo.png);
     background-repeat: no-repeat;
     background-position: right;
     background-size: contain;
@@ -111,10 +127,16 @@ table.tableDisplay td {
     text-align: center;
     vertical-align: middle;
 }
+/*#b7211b*/
+table.table-hover tbody tr:hover {
+    background-color: rgba(183, 33, 27, 0.26); 
+}
 
 table.tableDisplay th {
     text-align: center;
     vertical-align: middle;
+    background-color: rgb(16, 57, 134);
+    color: white;    
 }
 
 table.tableDisplay thead {
@@ -125,28 +147,32 @@ table.tableDisplay thead {
     height: 50px;
 }
 
-.widthSmall{
-width:20%;
-}
-.widthMedium{
-width:40%;
-}
-.widthTH{
-width:33%;
-}
-.widthTHsmall{
-width:25%;
+.widthSmall {
+    width: 20%;
 }
 
-hr{
-margin-bottom: 30px;
+.widthMedium {
+    width: 40%;
+}
+
+.widthTH {
+    width: 33%;
+}
+
+.widthTHsmall {
+    width: 25%;
+}
+
+hr {
+    margin-bottom: 30px;
 }
 
 /***** FOOTER *******/
 .footer {
     display: flex;
     align-items: center;
-    background-color: gray;
+    background-color: rgb(16, 57, 134);
+    color: white;
     height: 60px;
     margin: 50px 0;
 }

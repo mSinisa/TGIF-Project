@@ -1,4 +1,5 @@
 var app = new Vue({
+    
     el: "#app",
 
     data: {
@@ -77,18 +78,17 @@ var app = new Vue({
             }
             //dividing total percentages number by number of members to get the avg pct and add toFixed to round
             //the number and add a string with %
-            this.statistics.parties[0].votes_with_party_pct = (this.statistics.parties[0].votes_with_party_pct / this.statistics.parties[0].number_of_members).toFixed() + " %";
-            this.statistics.parties[1].votes_with_party_pct = (this.statistics.parties[1].votes_with_party_pct / this.statistics.parties[1].number_of_members).toFixed() + " %";
-            this.statistics.parties[2].votes_with_party_pct = (this.statistics.parties[2].votes_with_party_pct / this.statistics.parties[2].number_of_members).toFixed() + " %";
+            this.statistics.parties[0].votes_with_party_pct = (this.statistics.parties[0].votes_with_party_pct / this.statistics.parties[0].number_of_members).toFixed();
+            this.statistics.parties[1].votes_with_party_pct = (this.statistics.parties[1].votes_with_party_pct / this.statistics.parties[1].number_of_members).toFixed();
+            this.statistics.parties[2].votes_with_party_pct = (this.statistics.parties[2].votes_with_party_pct / this.statistics.parties[2].number_of_members).toFixed();
             //total number of members= senators array lenght
             this.statistics.parties[3].number_of_members = this.senators.length;
             //since independents might be equal to 0 adding an if statement for it
             if (this.statistics.parties[2].number_of_members == 0) {
-                this.statistics.parties[3].votes_with_party_pct = ((this.statistics.parties[0].votes_with_party_pct + this.statistics.parties[1].votes_with_party_pct) / 2).toFixed() + " %";
+                this.statistics.parties[3].votes_with_party_pct = ((this.statistics.parties[0].votes_with_party_pct + this.statistics.parties[1].votes_with_party_pct) / 2).toFixed();
             } else {
-                this.statistics.parties[3].votes_with_party_pct = (this.statistics.parties[3].votes_with_party_pct / this.senators.length).toFixed() + " %";
+                this.statistics.parties[3].votes_with_party_pct = (this.statistics.parties[3].votes_with_party_pct / this.senators.length).toFixed();
             }
-            //            return statistics;
         },
 
         getBottomAndTop10Pct: function (acc) {
@@ -102,19 +102,23 @@ var app = new Vue({
             //if its acsending order
             if (acc) {
                 for (var i = 0; i < num; i++) {
+                //push first 11 senators to top10Pct array
                     this.top10Pct.push(sortedSenators[i]);
                 }
                 for (var j = num; j < sortedSenators.length; j++) {
+            //check if the 12th and onward senators have the same missed votes pct as the 11th and if they do add them to top10 array
                     if (sortedSenators[j].missed_votes_pct === sortedSenators[num - 1].missed_votes_pct) {
                         this.top10Pct.push(sortedSenators[j]);
                     }
                 }
 
             } else {
+                //starting from the back of the array conting down and getting first 11 senators into bottom10Pct array
                 for (var k = sortedSenators.length - 1; k > sortedSenators.length - num - 1; k--) {
                     this.bottom10Pct.push(sortedSenators[k]);
                 }
                 for (var l = sortedSenators.length - num - 1; l > 0; l--) {
+        //check if the 12th and onward senators have the same missed votes pct as the 11th and if they do add them to bottom10 arr
                     if (sortedSenators[l].missed_votes_pct === sortedSenators[sortedSenators.length - num].missed_votes_pct) {
                         this.bottom10Pct.push(sortedSenators[l]);
                     }

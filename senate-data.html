@@ -68,15 +68,15 @@
 
             <div class="row filterAreaContainer">
                 <div class="filterCheckboxes col-6">
-                    <label>Filter by Party:</label>
-                    <label><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="D">Democrat</label>
-                    <label><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="R">Republican</label>
-                    <label><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="I">Independent</label>
+                    <label class="labelMoreVisible">Filter by Party:</label>
+                    <label  class="labelColor"><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="D">Democrat</label>
+                    <label  class="labelColor"><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="R">Republican</label>
+                    <label  class="labelColor"><input v-model="checkedCheckboxes" type="checkbox" name="Party" value="I">Independent</label>
                 </div>
 
                 <div class="dropdownArea col-6 d-flex justify-content-end">
-                    <label for="dropDownBody">Filter by State
-                        <select class="dropdown" id="dropDownBody" name="states" v-model="options">
+                    <label class="labelMoreVisible" for="dropDownBody">Filter by State
+                        <select class="dropdown  labelColor" id="dropDownBody" name="states" v-model="options">
                             <option  value="All" selected>All</option>
                             <option v-for="state in states">{{ state }}</option>
                             
@@ -107,7 +107,7 @@
         </div>
 
         <div class="footer">
-            <h4 class="footerText">© 2018 TGIF | All Rights Reserved</h4>
+            <p class="footerText">© 2018 TGIF | All Rights Reserved</p>
         </div>
 
     </div>
