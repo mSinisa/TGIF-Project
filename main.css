@@ -55,6 +55,7 @@ nav a {
 }
 
 /**** INDEX PAGE *****/
+
 .card-header:first-child {
     height: 60px;
     background: transparent;
@@ -114,6 +115,7 @@ button.btn {
 }
 
 /****** HOUSE AND SENATE TABLE FILTER PAGES******/
+
 .textArea {
     padding-left: 0;
 }
@@ -129,7 +131,6 @@ button.btn {
     font-size: 18px;
 }
 
-
 .houseImg {
     background: url(images/congress_logo.png);
     background-repeat: no-repeat;
@@ -140,7 +141,7 @@ button.btn {
 }
 
 .senateImg {
-    background-image: url(images/senate_seal.png);
+    background-image: url(images/senate_seal_logo.png);
     background-repeat: no-repeat;
     background-position: right;
     background-size: contain;
@@ -167,7 +168,8 @@ button.btn {
     border: 1px dotted rgb(16, 57, 134);
 }
 
-/**************/
+/*********   ATTENDANCE AND LOYALTY PAGES *****/
+
 .headlineColorBorder {
     color: #b7211b;
     border-bottom: 1px dotted rgb(16, 57, 134);
@@ -188,7 +190,6 @@ table.tableDisplay td {
     vertical-align: middle;
 }
 
-/*#b7211b*/
 table.table-hover tbody tr:hover {
     background-color: rgba(183, 33, 27, 0.26);
 }
@@ -229,6 +230,7 @@ hr {
 }
 
 /***** FOOTER *******/
+
 .footer {
     display: flex;
     align-items: center;
