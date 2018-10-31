@@ -95,12 +95,12 @@
                     </tr>
                 </thead>
                 <tbody id="tableBodyHouse">
-                    <tr v-for="congressman in filterCheckedMembers">
-                    <td><a v-bind:href=congressman.url>{{congressman.first_name}} {{congressman.middle_name}} {{congressman.last_name}}</a></td>
-                    <td>{{congressman.party}}</td>
-                    <td>{{congressman.state}}</td>
-                    <td>{{congressman.seniority}}</td>
-                    <td>{{congressman.votes_with_party_pct}} %</td>
+                    <tr v-for="member in filterCheckedMembers">
+                    <td><a target="_blank" v-bind:href=member.url>{{member.first_name}} {{member.middle_name}} {{member.last_name}}</a></td>
+                    <td>{{member.party}}</td>
+                    <td>{{member.state}}</td>
+                    <td>{{member.seniority}}</td>
+                    <td>{{member.votes_with_party_pct}} %</td>
                     </tr>
                 </tbody>
             </table>
@@ -116,7 +116,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="pro-congress-113-house.js"></script>
-    <script src="house.js"></script>
+    <script src="senate.js"></script>
 </body>
 
 </html>

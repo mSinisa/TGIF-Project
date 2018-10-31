@@ -5,7 +5,7 @@ var app = new Vue({
     data: {
 
         url: "https://api.propublica.org/congress/v1/113/house/members.json",
-        congressmen: [],
+        members: [],
         checkedCheckboxes: [],
         options: "All"
 
@@ -13,7 +13,7 @@ var app = new Vue({
 
     methods: {
 
-        getDataHouse: function () {
+        getData: function () {
             console.log(this);
             fetch(this.url, {
                     headers: {
@@ -24,7 +24,7 @@ var app = new Vue({
                     return data.json();
                 })
                 .then(function (myData) {
-                    app.congressmen = myData.results[0].members;
+                    app.members = myData.results[0].members;
                 })
         }
     },
@@ -32,21 +32,21 @@ var app = new Vue({
     computed: {
 
         states: function () {
-            return [...new Set(this.congressmen.map((congressman) => congressman.state).sort())]
+            return [...new Set(this.members.map((member) => member.state).sort())]
         },
 
         filterCheckedMembers: function () {
             var filteredMembers = [];
             if (this.checkedCheckboxes.length === 0 && this.options === "All") {
-                return this.congressmen;
+                return this.members;
             } else {
-                for (var i = 0; i < this.congressmen.length; i++) {
-                    if (this.checkedCheckboxes.length === 0 && (this.options === "All" || this.options === this.congressmen[i].state)) {
-                        filteredMembers.push(this.congressmen[i]);
+                for (var i = 0; i < this.members.length; i++) {
+                    if (this.checkedCheckboxes.length === 0 && (this.options === "All" || this.options === this.members[i].state)) {
+                        filteredMembers.push(this.members[i]);
                     } else {
                         for (var j = 0; j < this.checkedCheckboxes.length; j++) {
-                            if ((this.congressmen[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.congressmen[i].state)) {
-                                filteredMembers.push(this.congressmen[i]);
+                            if ((this.members[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.members[i].state)) {
+                                filteredMembers.push(this.members[i]);
                             }
                         }
                     }
@@ -57,7 +57,7 @@ var app = new Vue({
     },
 
     created: function () {
-        this.getDataHouse();
+        this.getData();
     }
 
 });
