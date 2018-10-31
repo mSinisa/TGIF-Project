@@ -40,8 +40,8 @@ var app = new Vue({
 
         bottom10Pct: [],
         top10Pct: [],
-        bottom10PctLoyalty:[],
-        top10PctLoyalty:[]   
+        bottom10PctLoyalty: [],
+        top10PctLoyalty: []
 
     },
 
@@ -103,9 +103,10 @@ var app = new Vue({
                     //if (this.dataOptions === "attendance") 
                     //app.members = myData.results[0].members;
                     app.getTopTableInfo();
-                    app.getBottomAndTop10Pct(true, "missed_votes_pct", this.bottom10Pct, this.top10Pct);
-                    app.getBottomAndTop10Pct(false, "missed_votes_pct", this.bottom10Pct, this.top10Pct);
-
+                    app.top10Pct = app.getBottomAndTop10Pct(true, "missed_votes_pct");
+                    app.bottom10Pct = app.getBottomAndTop10Pct(false, "missed_votes_pct");
+                    app.top10PctLoyalty= app.getBottomAndTop10Pct(true, "votes_with_party_pct");
+                    app.bottom10PctLoyalty=app.getBottomAndTop10Pct(false, "votes_with_party_pct");
 
                 })
         },
@@ -137,41 +138,54 @@ var app = new Vue({
             }
         },
 
-        getBottomAndTop10Pct: function (acc, key, arr1, arr2) {
+        getBottomAndTop10Pct: function (acc, key) {
+            var filtered = [];
+            console.log(this.members[0][key])
             //sort array or members by missed votes pct
             /* key- missed_votes percentage and votes_with_party_pac*/
             /* arr for party attendence top10Pct then bottom10Pct and for loyalty pages reverse*/
             var sortedmembers = Array.from(this.members);
+            console.log(this.members);
+            console.log(sortedmembers.length);
+
             sortedmembers.sort(function (a, b) {
-                return (a.key > b.key) ? 1 : ((b.key > a.key) ? -1 : 0);
+                return (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
             });
+            console.log(sortedmembers);
             //calculate 10percent of members and round the number to have a cut off point
             var num = Math.round(sortedmembers.length * 0.1);
             //if its acsending order
             if (acc) {
                 for (var i = 0; i < num; i++) {
                     //push first 11 members to top10Pct array
-                    this.arr1.push(sortedmembers[i]);
+                    filtered.push(sortedmembers[i]);
+                    console.log("INNN if")
                 }
+                console.log(filtered);
                 for (var j = num; j < sortedmembers.length; j++) {
                     //check if the 12th and onward members have the same missed votes pct as the 11th and if they do add them to top10 array
-                    if (sortedmembers[j].key === sortedmembers[num - 1].key) {
-                        this.arr1.push(sortedmembers[j]);
+                    if (sortedmembers[j][key] == filtered[num - 1][key]) {
+                        console.log(sortedmembers[j][key])
+                        filtered.push(sortedmembers[j]);
+
                     }
                 }
 
             } else {
+
                 //starting from the back of the array conting down and getting first 11 members into bottom10Pct array
                 for (var k = sortedmembers.length - 1; k > sortedmembers.length - num - 1; k--) {
-                    this.arr2.push(sortedmembers[k]);
+                    filtered.push(sortedmembers[k]);
                 }
                 for (var l = sortedmembers.length - num - 1; l > 0; l--) {
                     //check if the 12th and onward members have the same missed votes pct as the 11th and if they do add them to bottom10 arr
-                    if (sortedmembers[l].key === sortedmembers[sortedmembers.length - num].key) {
-                        this.arr2.push(sortedmembers[l]);
+                    if (sortedmembers[l][key] === sortedmembers[sortedmembers.length - num][key]) {
+                        filtered.push(sortedmembers[l]);
                     }
                 }
             }
+            console.log(filtered)
+            return filtered;
         }
 
     },
@@ -208,6 +222,7 @@ var app = new Vue({
     created: function () {
         this.webInit();
         this.getData();
+     
     },
     mounted: function () {
 
@@ -224,12 +239,10 @@ var app = new Vue({
 
 
 function hideAndShow(id1, id2, id3) {
-    console.log("In")
     var dots = document.getElementById(id1);
     var moreText = document.getElementById(id2);
     var btnText = document.getElementById(id3);
     btnText.addEventListener("click", function () {
-        console.log("INBut")
         if (dots.style.display === "none") {
             dots.style.display = "inline";
             btnText.innerHTML = "+ Read more";
