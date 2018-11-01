@@ -105,8 +105,8 @@ var app = new Vue({
                     app.getTopTableInfo();
                     app.top10Pct = app.getBottomAndTop10Pct(true, "missed_votes_pct");
                     app.bottom10Pct = app.getBottomAndTop10Pct(false, "missed_votes_pct");
-                    app.top10PctLoyalty= app.getBottomAndTop10Pct(true, "votes_with_party_pct");
-                    app.bottom10PctLoyalty=app.getBottomAndTop10Pct(false, "votes_with_party_pct");
+                    app.top10PctLoyalty = app.getBottomAndTop10Pct(true, "votes_with_party_pct");
+                    app.bottom10PctLoyalty = app.getBottomAndTop10Pct(false, "votes_with_party_pct");
 
                 })
         },
@@ -186,6 +186,40 @@ var app = new Vue({
             }
             console.log(filtered)
             return filtered;
+        },
+
+        hideAndShowText: function () {
+            var dots = document.getElementById("dots");
+            var moreText = document.getElementById("moreText");
+            var btnText = document.getElementById("textButton");
+            btnText.addEventListener("click", function () {
+                if (dots.style.display === "none") {
+                    dots.style.display = "inline";
+                    btnText.innerHTML = "+ Read more";
+                    moreText.style.display = "none";
+                } else {
+                    dots.style.display = "none";
+                    btnText.innerHTML = "- Read less";
+                    moreText.style.display = "inline";
+                }
+            });
+        },
+        
+        hideAndShowText2: function () {
+            var dots = document.getElementById("dots2");
+            var moreText = document.getElementById("moreText2");
+            var btnText = document.getElementById("textButton2");
+            btnText.addEventListener("click", function () {
+                if (dots.style.display === "none") {
+                    dots.style.display = "inline";
+                    btnText.innerHTML = "+ Read more";
+                    moreText.style.display = "none";
+                } else {
+                    dots.style.display = "none";
+                    btnText.innerHTML = "- Read less";
+                    moreText.style.display = "inline";
+                }
+            });
         }
 
     },
@@ -222,35 +256,8 @@ var app = new Vue({
     created: function () {
         this.webInit();
         this.getData();
-     
     },
     mounted: function () {
 
-        if (this.dataOptions === "home") {
-            var btnText = document.getElementById(id3);
-            console.log(btnText)
-            /*  hideAndShow("dots2", "moreText2", "textButton2");
-              hideAndShow("dots", "moreText", "textButton");*/
-        } else {
-
-        }
     }
 });
-
-
-function hideAndShow(id1, id2, id3) {
-    var dots = document.getElementById(id1);
-    var moreText = document.getElementById(id2);
-    var btnText = document.getElementById(id3);
-    btnText.addEventListener("click", function () {
-        if (dots.style.display === "none") {
-            dots.style.display = "inline";
-            btnText.innerHTML = "+ Read more";
-            moreText.style.display = "none";
-        } else {
-            dots.style.display = "none";
-            btnText.innerHTML = "- Read less";
-            moreText.style.display = "inline";
-        }
-    });
-}
