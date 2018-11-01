@@ -204,7 +204,7 @@ var app = new Vue({
                 }
             });
         },
-        
+
         hideAndShowText2: function () {
             var dots = document.getElementById("dots2");
             var moreText = document.getElementById("moreText2");
@@ -242,6 +242,10 @@ var app = new Vue({
                         for (var j = 0; j < this.checkedCheckboxes.length; j++) {
                             if ((this.members[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.members[i].state)) {
                                 filteredMembers.push(this.members[i]);
+                            } else if (filteredMembers.length == 0) {
+                                document.getElementById("messageDisplay").style.display = "block";
+                            } else if(filteredMembers.length > 0){
+                                document.getElementById("messageDisplay").style.display = "none";
                             }
                         }
                     }
@@ -256,6 +260,7 @@ var app = new Vue({
     created: function () {
         this.webInit();
         this.getData();
+        document.getElementById("messageDisplay").style.display = "none";
     },
     mounted: function () {
 
