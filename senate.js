@@ -140,14 +140,10 @@ var app = new Vue({
 
         getBottomAndTop10Pct: function (acc, key) {
             var filtered = [];
-            console.log(this.members[0][key])
             //sort array or members by missed votes pct
             /* key- missed_votes percentage and votes_with_party_pac*/
             /* arr for party attendence top10Pct then bottom10Pct and for loyalty pages reverse*/
             var sortedmembers = Array.from(this.members);
-            console.log(this.members);
-            console.log(sortedmembers.length);
-
             sortedmembers.sort(function (a, b) {
                 return (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
             });
@@ -159,13 +155,10 @@ var app = new Vue({
                 for (var i = 0; i < num; i++) {
                     //push first 11 members to top10Pct array
                     filtered.push(sortedmembers[i]);
-                    console.log("INNN if")
                 }
-                console.log(filtered);
                 for (var j = num; j < sortedmembers.length; j++) {
                     //check if the 12th and onward members have the same missed votes pct as the 11th and if they do add them to top10 array
                     if (sortedmembers[j][key] == filtered[num - 1][key]) {
-                        console.log(sortedmembers[j][key])
                         filtered.push(sortedmembers[j]);
 
                     }
@@ -184,7 +177,6 @@ var app = new Vue({
                     }
                 }
             }
-            console.log(filtered)
             return filtered;
         },
 
@@ -238,10 +230,12 @@ var app = new Vue({
                 for (var i = 0; i < this.members.length; i++) {
                     if (this.checkedCheckboxes.length === 0 && (this.options === "All" || this.options === this.members[i].state)) {
                         filteredMembers.push(this.members[i]);
+                        document.getElementById("messageDisplay").style.display = "none";
                     } else {
                         for (var j = 0; j < this.checkedCheckboxes.length; j++) {
                             if ((this.members[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.members[i].state)) {
                                 filteredMembers.push(this.members[i]);
+                                document.getElementById("messageDisplay").style.display = "none";
                             } else if (filteredMembers.length == 0) {
                                 document.getElementById("messageDisplay").style.display = "block";
                             } else if(filteredMembers.length > 0){

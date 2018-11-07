@@ -114,7 +114,7 @@ button.btn {
     height: 350px;
 }
 
-/****** HOUSE AND SENATE TABLE FILTER PAGES******/
+/****** HOUSE AND SENATE TABLE FILTER PAGES ******/
 
 .textArea {
     padding-left: 0;
@@ -137,7 +137,6 @@ button.btn {
     background-position: right;
     background-size: contain;
     height: 250px;
-
 }
 
 .senateImg {
@@ -166,6 +165,11 @@ button.btn {
     margin-left: 10px;
     background-color: transparent;
     border: 1px dotted rgb(16, 57, 134);
+}
+
+.messageDisplay{
+vertical-align: middle;
+text-align: center;
 }
 
 /*********   ATTENDANCE AND LOYALTY PAGES *****/
