@@ -86,7 +86,8 @@ var app = new Vue({
                     break;
             }
 
-            this.url = "https://api.propublica.org/congress/v1/113/" + pageLocation + "/members.json"
+            this.url = "https://api.propublica.org/congress/v1/113/" + pageLocation + "/members.json";
+             
         },
 
         getData: function () {
@@ -253,8 +254,13 @@ var app = new Vue({
 
     created: function () {
         this.webInit();
-        this.getData();
+        if(this.dataOptions !== "home"){
+               this.getData();
+        }
+    
+        if( document.getElementById("messageDisplay")){
         document.getElementById("messageDisplay").style.display = "none";
+            }
     },
     mounted: function () {
 
