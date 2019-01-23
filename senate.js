@@ -85,6 +85,10 @@ var app = new Vue({
                     this.dataOptions = "home"
                     break;
 
+                    case "/":
+                    this.dataOptions = "home"
+                    break;
+
             }
 
             this.url = "https://api.propublica.org/congress/v1/113/" + pageLocation + "/members.json";
@@ -239,7 +243,7 @@ var app = new Vue({
 
     created: function () {
         this.webInit();
-        if(this.dataOptions !== "home" || this.dataOptions == ""){
+        if(this.dataOptions !== "home"){
                this.getData();
         }
     
