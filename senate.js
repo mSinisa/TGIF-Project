@@ -84,6 +84,7 @@ var app = new Vue({
                 case "/index.html":
                     this.dataOptions = "home"
                     break;
+
             }
 
             this.url = "https://api.propublica.org/congress/v1/113/" + pageLocation + "/members.json";
@@ -182,10 +183,11 @@ var app = new Vue({
         },
 
         hideAndShowText: function (id1, id2, id3) {
+            
             var dots = document.getElementById(id1);
             var moreText = document.getElementById(id2);
             var btnText = document.getElementById(id3);
-            btnText.addEventListener("click", function () {
+          
                 if (dots.style.display === "none") {
                     dots.style.display = "inline";
                     btnText.innerHTML = "+ Read more";
@@ -195,7 +197,7 @@ var app = new Vue({
                     btnText.innerHTML = "- Read less";
                     moreText.style.display = "inline";
                 }
-            });
+            
         }
 
     },
@@ -237,7 +239,7 @@ var app = new Vue({
 
     created: function () {
         this.webInit();
-        if(this.dataOptions !== "home"){
+        if(this.dataOptions !== "home" && this.dataOptions == ""){
                this.getData();
         }
     
