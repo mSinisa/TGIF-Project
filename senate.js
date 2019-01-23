@@ -239,7 +239,7 @@ var app = new Vue({
 
     created: function () {
         this.webInit();
-        if(this.dataOptions !== "home" && this.dataOptions == ""){
+        if(this.dataOptions !== "home" || this.dataOptions == ""){
                this.getData();
         }
     
