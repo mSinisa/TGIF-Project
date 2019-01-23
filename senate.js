@@ -14,28 +14,27 @@ var app = new Vue({
 
         statistics: {
 
-            "parties": [
-                {
+            "parties": [{
                     "party": "Democrats",
                     "number_of_members": 0,
                     "votes_with_party_pct": 0
-        },
+                },
                 {
                     "party": "Republicans",
                     "number_of_members": 0,
                     "votes_with_party_pct": 0
-        },
+                },
                 {
                     "party": "Independents",
                     "number_of_members": 0,
                     "votes_with_party_pct": 0
-        },
+                },
                 {
                     "party": "Total",
                     "number_of_members": 0,
                     "votes_with_party_pct": 0
-            }
-        ]
+                }
+            ]
         },
 
         bottom10Pct: [],
@@ -85,14 +84,14 @@ var app = new Vue({
                     this.dataOptions = "home"
                     break;
 
-                    case "/":
+                case "/":
                     this.dataOptions = "home"
                     break;
 
             }
 
             this.url = "https://api.propublica.org/congress/v1/113/" + pageLocation + "/members.json";
-             
+
         },
 
         getData: function () {
@@ -187,21 +186,21 @@ var app = new Vue({
         },
 
         hideAndShowText: function (id1, id2, id3) {
-            
+
             var dots = document.getElementById(id1);
             var moreText = document.getElementById(id2);
             var btnText = document.getElementById(id3);
-          
-                if (dots.style.display === "none") {
-                    dots.style.display = "inline";
-                    btnText.innerHTML = "+ Read more";
-                    moreText.style.display = "none";
-                } else {
-                    dots.style.display = "none";
-                    btnText.innerHTML = "- Read less";
-                    moreText.style.display = "inline";
-                }
-            
+
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "+ Read more";
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "- Read less";
+                moreText.style.display = "inline";
+            }
+
         }
 
     },
@@ -228,7 +227,7 @@ var app = new Vue({
                                 document.getElementById("messageDisplay").style.display = "none";
                             } else if (filteredMembers.length == 0) {
                                 document.getElementById("messageDisplay").style.display = "block";
-                            } else if(filteredMembers.length > 0){
+                            } else if (filteredMembers.length > 0) {
                                 document.getElementById("messageDisplay").style.display = "none";
                             }
                         }
@@ -243,13 +242,13 @@ var app = new Vue({
 
     created: function () {
         this.webInit();
-        if(this.dataOptions !== "home"){
-               this.getData();
+        if (this.dataOptions !== "home") {
+            this.getData();
         }
-    
-        if( document.getElementById("messageDisplay")){
-        document.getElementById("messageDisplay").style.display = "none";
-            }
+
+        if (document.getElementById("messageDisplay")) {
+            document.getElementById("messageDisplay").style.display = "none";
+        }
     },
     mounted: function () {
 
