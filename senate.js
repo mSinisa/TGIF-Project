@@ -100,6 +100,12 @@ var app = new Vue({
                         "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
                     }
                 })
+                .then(function(res){
+                    if(!res.ok){
+                        throw Error(res.status);
+                    }
+                    return res;
+                })
                 .then(function (data) {
                     return data.json();
                 })
@@ -112,7 +118,9 @@ var app = new Vue({
                     app.bottom10Pct = app.getBottomAndTop10Pct(false, "missed_votes_pct");
                     app.top10PctLoyalty = app.getBottomAndTop10Pct(true, "votes_with_party_pct");
                     app.bottom10PctLoyalty = app.getBottomAndTop10Pct(false, "votes_with_party_pct");
-
+                })
+                .catch(function(err){
+                    console.log(err);
                 })
         },
 
