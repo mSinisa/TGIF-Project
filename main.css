@@ -54,6 +54,9 @@ nav a {
     font-weight: 400;
 }
 
+a.nav-link:hover{
+    color: #b7211b !important; 
+}
 /**** INDEX PAGE *****/
 
 .card-header:first-child {

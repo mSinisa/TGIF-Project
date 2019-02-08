@@ -1,5 +1,5 @@
 //AJAX - Asincrone, this code needs some time to execute.  
-var app = new Vue({
+let app = new Vue({
 
     el: "#app",
 
@@ -46,8 +46,8 @@ var app = new Vue({
 
     methods: {
 
-        webInit: function () {
-            var pageLocation = window.location.pathname;
+        webInit() {
+            let pageLocation = window.location.pathname;
             switch (pageLocation) {
 
                 case "/senate-data.html":
@@ -90,7 +90,7 @@ var app = new Vue({
 
             }
 
-            this.url = "https://api.propublica.org/congress/v1/113/" + pageLocation + "/members.json";
+            this.url = `https://api.propublica.org/congress/v1/113/${pageLocation}/members.json`;
 
         },
 
@@ -100,16 +100,16 @@ var app = new Vue({
                         "X-API-Key": "B0XqY0T7xhm1JCRGP4GMP96DmFErfu3wWcm2uu4O"
                     }
                 })
-                .then(function(res){
+                .then(res =>{
                     if(!res.ok){
                         throw Error(res.status);
                     }
                     return res;
                 })
-                .then(function (data) {
+                .then(data => {
                     return data.json();
                 })
-                .then(function (myData) {
+                .then(myData => {
                     app.members = myData.results[0].members;
                     //if (this.dataOptions === "attendance") 
                     //app.members = myData.results[0].members;
@@ -119,14 +119,14 @@ var app = new Vue({
                     app.top10PctLoyalty = app.getBottomAndTop10Pct(true, "votes_with_party_pct");
                     app.bottom10PctLoyalty = app.getBottomAndTop10Pct(false, "votes_with_party_pct");
                 })
-                .catch(function(err){
+                .catch(err =>{
                     console.log(err);
                 })
         },
 
         /*******  SENATE AND HOUSE ATTENDANCE ******/
-        getTopTableInfo: function () {
-            for (var i = 0; i < this.members.length; i++) {
+        getTopTableInfo () {
+            for (let i = 0; i < this.members.length; i++) {
                 if (this.members[i].party === "D") {
                     this.statistics.parties[0].number_of_members += 1;
                     this.statistics.parties[0].votes_with_party_pct += this.members[i].votes_with_party_pct;
@@ -151,39 +151,36 @@ var app = new Vue({
             }
         },
 
-        getBottomAndTop10Pct: function (acc, key) {
-            var filtered = [];
+        getBottomAndTop10Pct (acc, key) {
+            let filtered = [];
             //sort array or members by missed votes pct
             /* key- missed_votes percentage and votes_with_party_pac*/
             /* arr for party attendence top10Pct then bottom10Pct and for loyalty pages reverse*/
-            var sortedmembers = Array.from(this.members);
+            let sortedmembers = Array.from(this.members);
             sortedmembers.sort(function (a, b) {
                 return (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
             });
-            console.log(sortedmembers);
             //calculate 10percent of members and round the number to have a cut off point
-            var num = Math.round(sortedmembers.length * 0.1);
+            let num = Math.round(sortedmembers.length * 0.1);
             //if its acsending order
             if (acc) {
-                for (var i = 0; i < num; i++) {
+                for (let i = 0; i < num; i++) {
                     //push first 11 members to top10Pct array
                     filtered.push(sortedmembers[i]);
                 }
-                for (var j = num; j < sortedmembers.length; j++) {
+                for (let j = num; j < sortedmembers.length; j++) {
                     //check if the 12th and onward members have the same missed votes pct as the 11th and if they do add them to top10 array
                     if (sortedmembers[j][key] == filtered[num - 1][key]) {
                         filtered.push(sortedmembers[j]);
-
                     }
                 }
-
             } else {
 
                 //starting from the back of the array conting down and getting first 11 members into bottom10Pct array
-                for (var k = sortedmembers.length - 1; k > sortedmembers.length - num - 1; k--) {
+                for (let k = sortedmembers.length - 1; k > sortedmembers.length - num - 1; k--) {
                     filtered.push(sortedmembers[k]);
                 }
-                for (var l = sortedmembers.length - num - 1; l > 0; l--) {
+                for (let l = sortedmembers.length - num - 1; l > 0; l--) {
                     //check if the 12th and onward members have the same missed votes pct as the 11th and if they do add them to bottom10 arr
                     if (sortedmembers[l][key] === sortedmembers[sortedmembers.length - num][key]) {
                         filtered.push(sortedmembers[l]);
@@ -193,11 +190,11 @@ var app = new Vue({
             return filtered;
         },
 
-        hideAndShowText: function (id1, id2, id3) {
+        hideAndShowText(id1, id2, id3) {
 
-            var dots = document.getElementById(id1);
-            var moreText = document.getElementById(id2);
-            var btnText = document.getElementById(id3);
+            let dots = document.getElementById(id1);
+            let moreText = document.getElementById(id2);
+            let btnText = document.getElementById(id3);
 
             if (dots.style.display === "none") {
                 dots.style.display = "inline";
@@ -215,21 +212,21 @@ var app = new Vue({
 
     computed: {
         /*****  FILTER PAGE ******/
-        states: function () {
+        states () {
             return [...new Set(this.members.map((member) => member.state).sort())]
         },
 
-        filterCheckedMembers: function () {
-            var filteredMembers = [];
+        filterCheckedMembers () {
+            let filteredMembers = [];
             if (this.checkedCheckboxes.length === 0 && this.options === "All") {
                 return this.members;
             } else {
-                for (var i = 0; i < this.members.length; i++) {
+                for (let i = 0; i < this.members.length; i++) {
                     if (this.checkedCheckboxes.length === 0 && (this.options === "All" || this.options === this.members[i].state)) {
                         filteredMembers.push(this.members[i]);
                         document.getElementById("messageDisplay").style.display = "none";
                     } else {
-                        for (var j = 0; j < this.checkedCheckboxes.length; j++) {
+                        for (let j = 0; j < this.checkedCheckboxes.length; j++) {
                             if ((this.members[i].party === this.checkedCheckboxes[j]) && (this.options === "All" || this.options === this.members[i].state)) {
                                 filteredMembers.push(this.members[i]);
                                 document.getElementById("messageDisplay").style.display = "none";
@@ -248,7 +245,7 @@ var app = new Vue({
 
     },
 
-    created: function () {
+    created () {
         this.webInit();
         if (this.dataOptions !== "home") {
             this.getData();
@@ -258,7 +255,7 @@ var app = new Vue({
             document.getElementById("messageDisplay").style.display = "none";
         }
     },
-    mounted: function () {
+    mounted() {
 
     }
 });
